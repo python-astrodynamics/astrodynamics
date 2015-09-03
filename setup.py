@@ -9,12 +9,12 @@ init_data = open(INIT_FILE).read()
 
 AUTHORS = 'The astrodynamics developers.'
 EMAIL = 'astrodynamics@frazermclean.co.uk'
-DESCRIPTION = ''
 
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_data))
 
 VERSION = metadata['version']
 LICENSE = metadata['license']
+DESCRIPTION = metadata['description']
 
 requires = []
 
