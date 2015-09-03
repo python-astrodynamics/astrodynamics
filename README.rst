@@ -13,7 +13,7 @@ Installation
 Authors
 ~~~~~~~
 - Juan Luis Cano <juanlu001@gmail.com>
-- Helge Eichhorn
+- Helge Eichhorn <helge@helgeeichhorn.de>
 - Frazer McLean <frazer@frazermclean.co.uk>
 
 Documentation
