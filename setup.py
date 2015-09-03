@@ -46,7 +46,7 @@ setup(
     name='astrodynamics',
     version=VERSION,
     description=DESCRIPTION,
-    long_description=open('README').read(),
+    long_description=open('README.rst').read(),
     author=AUTHORS,
     author_email=EMAIL,
     url='https://github.com/python-astrodynamics/astrodynamics',

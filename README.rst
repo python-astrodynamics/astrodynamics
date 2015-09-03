@@ -22,6 +22,11 @@ Documentation
 For in-depth information, `visit the
 documentation <http://readthedocs.org/>`__!
 
+Development
+~~~~~~~~~~~
+
+astrodynamics uses `semantic versioning <http://semver.org>`__
+
 .. |Build Status| image:: http://img.shields.io/travis/python-astrodynamics/astrodynamics.svg?style=flat-square
    :target: https://travis-ci.org/python-astrodynamics/astrodynamics
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/astrodynamics.svg?style=flat-square
