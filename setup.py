@@ -7,14 +7,13 @@ from setuptools import setup, Command, find_packages
 INIT_FILE = 'astrodynamics/__init__.py'
 init_data = open(INIT_FILE).read()
 
-AUTHORS = 'The astrodynamics developers.'
-EMAIL = 'astrodynamics@frazermclean.co.uk'
-
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_data))
 
 VERSION = metadata['version']
 LICENSE = metadata['license']
 DESCRIPTION = metadata['description']
+AUTHOR = metadata['author']
+EMAIL = metadata['email']
 
 requires = []
 
@@ -47,7 +46,7 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=open('README.rst').read(),
-    author=AUTHORS,
+    author=AUTHOR,
     author_email=EMAIL,
     url='https://github.com/python-astrodynamics/astrodynamics',
     packages=find_packages(),

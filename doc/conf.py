@@ -61,7 +61,7 @@ RELEASE = metadata['version']
 LICENSE = metadata['license']
 DESCRIPTION = metadata['description']
 
-AUTHORS = 'The astrodynamics developers.'
+AUTHOR = metadata['author']
 
 ver_parts = RELEASE.split('.')
 for i, n in enumerate(ver_parts):
@@ -72,7 +72,7 @@ VERSION = '.'.join(str(n) for n in ver_parts if isinstance(n, Number))
 
 # General information about the project.
 project = 'astrodynamics'
-copyright = '2015, {}'.format(AUTHORS)
+copyright = '2015, {}'.format(AUTHOR)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -224,7 +224,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index', 'astrodynamics.tex', 'astrodynamics Documentation', AUTHORS, 'manual'),
+    ('index', 'astrodynamics.tex', 'astrodynamics Documentation', AUTHOR, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -254,7 +254,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'astrodynamics', 'astrodynamics Documentation',
-     [AUTHORS], 1)
+     [AUTHOR], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -267,7 +267,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'astrodynamics', 'astrodynamics Documentation', AUTHORS, 'astrodynamics',
+    ('index', 'astrodynamics', 'astrodynamics Documentation', AUTHOR, 'astrodynamics',
      DESCRIPTION, 'Miscellaneous'),
 ]
 
