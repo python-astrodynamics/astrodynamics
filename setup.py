@@ -20,10 +20,13 @@ requires = []
 extras_require = {
     'dev': [
         'pytest',
+        'shovel',
         'sphinx',
         'twine',
+        'watchdog',
     ],
 }
+
 
 class PyTest(Command):
     """Allow 'python setup.py test' to run without first installing pytest"""
