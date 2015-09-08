@@ -15,7 +15,9 @@ DESCRIPTION = metadata['description']
 AUTHOR = metadata['author']
 EMAIL = metadata['email']
 
-requires = []
+requires = [
+    'astropy',
+]
 
 extras_require = {
     'dev': [

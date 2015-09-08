@@ -35,7 +35,9 @@ needs_sphinx = '1.3'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'astrodynamics-docs',
 ]
@@ -285,8 +287,11 @@ texinfo_documents = [
 # texinfo_no_detailmenu = False
 
 # intersphinx
-intersphinx_mapping = {'python': ('http://docs.python.org/3', None),
-                       'ipython': ('http://ipython.org/ipython-doc/stable', None)}
+intersphinx_mapping = {
+    'python': ('http://docs.python.org/3', None),
+    'ipython': ('http://ipython.org/ipython-doc/stable', None),
+    'astropy': ('http://docs.astropy.org/en/stable/', None),
+}
 
 autodoc_member_order = 'bysource'
 
