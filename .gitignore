@@ -58,3 +58,6 @@ target/
 
 # IDE / Text Editor Project Files
 *.sublime-*
+
+# Virtualenv
+.venv
