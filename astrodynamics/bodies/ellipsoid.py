@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function
 
 from astropy import units as u
+from represent import ReprHelperMixin
 
 from ..constants import (
     WGS84_ANGULAR_VELOCITY, WGS84_EQUATORIAL_RADIUS, WGS84_FLATTENING,
@@ -15,7 +16,7 @@ __all__ = (
 )
 
 
-class Ellipsoid(object):
+class Ellipsoid(ReprHelperMixin, object):
     """Ellipsoid
 
     Parameters:
@@ -30,6 +31,11 @@ class Ellipsoid(object):
     a = read_only_property('_a', 'Semi-major axis')
     b = read_only_property('_b', 'Semi-minor axis')
     f = read_only_property('_f', 'Flattening')
+
+    def _repr_helper_(self, r):
+        r.keyword_from_attr('a')
+        r.keyword_from_attr('b')
+        r.keyword_from_attr('f')
 
 
 class ReferenceEllipsoid(Ellipsoid):
@@ -48,6 +54,11 @@ class ReferenceEllipsoid(Ellipsoid):
 
     mu = read_only_property('_mu', 'Standard gravitational parameter')
     spin = read_only_property('_spin', 'Angular velocity')
+
+    def _repr_helper_(self, r):
+        super(ReferenceEllipsoid, self)._repr_helper_(r)
+        r.keyword_from_attr('mu')
+        r.keyword_from_attr('spin')
 
 wgs84 = ReferenceEllipsoid(
     a=WGS84_EQUATORIAL_RADIUS,

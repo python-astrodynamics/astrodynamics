@@ -17,6 +17,7 @@ EMAIL = metadata['email']
 
 requires = [
     'astropy',
+    'represent>=1.4.0'
 ]
 
 extras_require = {
