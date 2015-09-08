@@ -20,7 +20,7 @@ Documentation
 ~~~~~~~~~~~~~
 
 For in-depth information, `visit the
-documentation <http://readthedocs.org/>`__!
+documentation <http://astrodynamics.readthedocs.org/en/latest/>`__!
 
 Development
 ~~~~~~~~~~~
