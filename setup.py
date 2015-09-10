@@ -1,5 +1,7 @@
+# coding: utf-8
+from __future__ import absolute_import, division, print_function
+
 import re
-import sys
 
 from setuptools import setup, Command, find_packages
 
@@ -22,6 +24,9 @@ requires = [
 
 extras_require = {
     'dev': [
+        'flake8',
+        'flake8-coding',
+        'flake8-future-import',
         'pytest',
         'shovel',
         'sphinx',

@@ -11,6 +11,7 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
+from __future__ import absolute_import, division, print_function
 
 from contextlib import suppress
 from numbers import Number
