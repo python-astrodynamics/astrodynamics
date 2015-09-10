@@ -7,7 +7,6 @@ from itertools import chain
 from pathlib import Path
 
 from astropy import units as u  # flake8: noqa
-from plumbum import ProcessExecutionError
 from plumbum.cmd import git
 from shovel import task
 
