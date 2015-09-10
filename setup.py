@@ -27,6 +27,7 @@ extras_require = {
         'flake8',
         'flake8-coding',
         'flake8-future-import',
+        'isort',
         'pytest',
         'shovel',
         'sphinx',
