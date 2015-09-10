@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'astrodynamics-docs',
