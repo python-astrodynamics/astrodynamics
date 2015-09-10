@@ -16,8 +16,6 @@ Predefined Reference Ellipsoids
 
    A :py:class:`ReferenceEllipsoid` instantiated with parameters from :py:mod:`astsrodynamics.constants.wgs84`
 
-.. hazmat:: 
-
 Inheritance diagram
 ===================
 
