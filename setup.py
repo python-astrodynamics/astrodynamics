@@ -32,6 +32,7 @@ extras_require = {
         'pytest',
         'shovel',
         'sphinx',
+        'tox',
         'twine',
         'watchdog',
     ],
