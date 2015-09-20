@@ -29,7 +29,7 @@ extras_require = {
         'flake8-future-import',
         'isort',
         'plumbum',
-        'pytest',
+        'pytest>=2.7.3',
         'shovel',
         'sphinx',
         'tox',
