@@ -18,12 +18,18 @@ HANGING_GRID_GROUPED = 5
 @task
 def format_imports():
     """Sort imports into a consistent style."""
-    for initfile in Path('.').glob('astrodynamics/**/__init__.py'):
+    astrodynamics_dir = Path('astrodynamics')
+    constants_dir = astrodynamics_dir / 'constants'
+    for initfile in astrodynamics_dir.glob('**/__init__.py'):
+        if constants_dir in initfile.parents:
+            continue
         SortImports(str(initfile),
                     multi_line_output=VERTICAL_HANGING_INDENT,
                     not_skip=['__init__.py'])
 
-    for pyfile in Path('.').glob('astrodynamics/**/*.py'):
+    for pyfile in astrodynamics_dir.glob('**/*.py'):
+        if constants_dir in pyfile.parents:
+            continue
         SortImports(str(pyfile),
                     multi_line_output=HANGING_GRID,
                     skip=['__init__.py'])

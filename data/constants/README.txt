@@ -1,0 +1,2 @@
+- Constants should be valid Python
+- astropy.units is available as variable 'u'

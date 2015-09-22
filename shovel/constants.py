@@ -61,6 +61,8 @@ def get_constants_from_data():
     sourcedir = Path('data', 'constants')
     for constantsfile in sourcedir.glob('*.txt'):
         modulename = constantsfile.stem
+        if modulename == 'README':
+            continue
         constants[modulename] = []
 
         with constantsfile.open(encoding='utf-8') as f:

@@ -1,4 +1,3 @@
-# Constants should be valid Python. astropy.units is available as variable 'u'
 WGS84_EQUATORIAL_RADIUS = 6378137 * u.m
 WGS84_FLATTENING = 1 / 298.257223563 * u.one
 WGS84_MU = 3.986004418e14 * u.m ** 3 / u.s ** 2
