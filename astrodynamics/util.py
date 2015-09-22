@@ -19,16 +19,14 @@ def read_only_property(name, docstring=None):
         name: Attribute name
         docstring: Optional docstring for getter.
 
-    Example
-    -------
+    Example:
+        .. code-block:: python
 
-    .. code-block:: python
+            class Circle:
+                def __init__(self, radius):
+                    self._radius = radius
 
-        class Circle:
-            def __init__(self, radius):
-                self._radius = radius
-
-            radius = read_only_property('_radius')
+                radius = read_only_property('_radius')
     """
     def fget(self):
         return getattr(self, name)
@@ -51,11 +49,10 @@ def verify_unit(quantity, unit):
         quantity parameter, unchanged.
 
     Example:
+        .. code-block:: python
 
-    .. code-block:: python
-
-        def __init__(self, a):
-            self.a = verify_unit(a, astropy.units.m)
+            def __init__(self, a):
+                self.a = verify_unit(a, astropy.units.m)
 
     :type quantity: :py:class:`astropy.units.Quantity`
     :type unit: :py:class:`astropy.units.UnitBase`

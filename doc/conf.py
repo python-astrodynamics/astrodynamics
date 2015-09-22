@@ -297,4 +297,6 @@ intersphinx_mapping = {
 
 autodoc_member_order = 'bysource'
 
+napoleon_numpy_docstring = False
+
 inheritance_graph_attrs = dict(bgcolor='transparent')
