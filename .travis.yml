@@ -19,10 +19,6 @@ matrix:
       env: TOXENV=py2flake8
     - python: 3.4
       env: TOXENV=py3flake8
-    - language: generic
-      os: osx
-      osx_image: xcode7
-      env: TOXENV=py27 CRYPTOGRAPHY_OSX_NO_LINK_FLAGS=1
 
 install:
   - pip install tox
