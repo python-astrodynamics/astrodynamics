@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 
 from plumbum.cmd import git
 
+
 def check_git_unchanged(filename):
     """Check git to avoid overwriting user changes."""
     if check_staged(filename):
