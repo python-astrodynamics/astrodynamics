@@ -5,7 +5,10 @@ import os
 from shutil import rmtree
 from subprocess import call
 
+from plumbum.cmd import pandoc
 from shovel import task
+
+from _helpers import check_git_unchanged
 
 
 @task
@@ -21,16 +24,13 @@ def watch():
 
 
 @task
-def upload():
-    """Generate, then upload to Read the Docs."""
-    gen()
-    raise NotImplementedError
-
-
-@task
-def gen():
+def gen(skipdirhtml=False):
     """Generate html and dirhtml output."""
-    call(['sphinx-build', '-b', 'dirhtml', '-W', '-E', 'doc', 'doc/_build/dirhtml'])
+    doc_changelog = 'doc/changelog.rst'
+    check_git_unchanged(doc_changelog)
+    pandoc('--from=markdown', '--to=rst', '--output=' + doc_changelog, 'CHANGELOG.md')
+    if not skipdirhtml:
+        call(['sphinx-build', '-b', 'dirhtml', '-W', '-E', 'doc', 'doc/_build/dirhtml'])
     call(['sphinx-build', '-b', 'html', '-W', '-E', 'doc', 'doc/_build/html'])
 
 

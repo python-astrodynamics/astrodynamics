@@ -10,7 +10,8 @@ Contents:
    :maxdepth: 3
 
    module
-   Change Log <https://github.com/python-astrodynamics/astrodynamics/blob/master/CHANGELOG.md>
+   development/index
+   changelog
 
 Indices and tables
 ==================

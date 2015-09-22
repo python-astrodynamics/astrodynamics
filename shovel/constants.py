@@ -7,8 +7,9 @@ from itertools import chain
 from pathlib import Path
 
 from astropy import units as u  # flake8: noqa
-from plumbum.cmd import git
 from shovel import task
+
+from _helpers import check_git_unchanged
 
 Constant = namedtuple('Constant', ['name', 'value'])
 constant_re = re.compile('^(?P<name>[A-Z0-9_]+) = (?P<value>.+)')
@@ -160,47 +161,3 @@ def make_documentation():
 def make():
     make_module()
     make_documentation()
-
-
-def check_git_unchanged(filename):
-    """Check git to avoid overwriting user changes."""
-    if check_staged(filename):
-        s = 'There are staged changes in {}, overwrite? [y/n] '.format(filename)
-        if input(s) in ('y', 'yes'):
-            return
-        else:
-            raise RuntimeError('There are staged changes in '
-                               '{}, aborting.'.format(filename))
-    if check_unstaged(filename):
-        s = 'There are unstaged changes in {}, overwrite? [y/n] '.format(filename)
-        if input(s) in ('y', 'yes'):
-            return
-        else:
-            raise RuntimeError('There are unstaged changes in '
-                               '{}, aborting.'.format(filename))
-
-
-def check_staged(filename=None):
-    """Check if there are 'changes to be committed' in the index."""
-    retcode, _, stdout = git['diff-index', '--quiet', '--cached', 'HEAD',
-                             filename].run(retcode=None)
-    if retcode == 1:
-        return True
-    elif retcode == 0:
-        return False
-    else:
-        raise RuntimeError(stdout)
-
-
-def check_unstaged(filename):
-    """Check if there are 'changes not staged for commit' in the working
-    directory.
-    """
-    retcode, _, stdout = git['diff-files', '--quiet',
-                             filename].run(retcode=None)
-    if retcode == 1:
-        return True
-    elif retcode == 0:
-        return False
-    else:
-        raise RuntimeError(stdout)
