@@ -12,7 +12,7 @@ Submitting patches
 * You must have legal permission to distribute any code you contribute to
   ``astrodynamics``, and it must be available under the MIT License.
 
-code
+Code
 ====
 
 When in doubt, refer to :pep:`8` for Python code. You can check if your code
