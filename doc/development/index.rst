@@ -18,4 +18,4 @@ Bugs and feature requests can be filed as issues on `GitHub`_. For general infor
 
 .. _`GitHub`: https://github.com/python-astrodynamics/astrodynamics
 .. _`contribution-guide.org`: http://www.contribution-guide.org/
-.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/doc/development/LICENSE
+.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/CRYPTOGRAPHY_LICENSE.txt
