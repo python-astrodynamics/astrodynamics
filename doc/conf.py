@@ -300,3 +300,9 @@ autodoc_member_order = 'bysource'
 napoleon_numpy_docstring = False
 
 inheritance_graph_attrs = dict(bgcolor='transparent')
+
+
+# A workaround for the responsive tables always having annoying scrollbars.
+# Found this solution here: https://github.com/snide/sphinx_rtd_theme/issues/117
+def setup(app):
+    app.add_stylesheet("no_scrollbars.css")
