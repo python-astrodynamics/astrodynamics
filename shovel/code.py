@@ -27,8 +27,10 @@ def format_imports():
                     multi_line_output=VERTICAL_HANGING_INDENT,
                     not_skip=['__init__.py'])
 
+    # Exclude __init__.py
+    # Exclude generated constants/ python files
     for pyfile in astrodynamics_dir.glob('**/*.py'):
-        if constants_dir in pyfile.parents:
+        if constants_dir in pyfile.parents and pyfile.stem != 'constant':
             continue
         SortImports(str(pyfile),
                     multi_line_output=HANGING_GRID,

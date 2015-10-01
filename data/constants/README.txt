@@ -1,2 +1,3 @@
 - Constants should be valid Python
-- astropy.units is available as variable 'u'
+- astropy.units is imported as 'u'
+- astrodynamics.constant.Constant is imported as 'Constant'
