@@ -12,7 +12,7 @@ Ellipsoids
 Predefined Reference Ellipsoids
 ===============================
 
-.. describe:: wgs84
+.. data:: wgs84
 
    A :py:class:`ReferenceEllipsoid` instantiated with parameters from :py:mod:`astsrodynamics.constants.wgs84`
 
