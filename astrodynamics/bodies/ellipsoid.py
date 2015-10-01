@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
-from astropy import units as u
 from represent import ReprHelperMixin
 
 from ..constants import (
@@ -24,9 +23,9 @@ class Ellipsoid(ReprHelperMixin, object):
         f: Flattening [-]
     """
     def __init__(self, a, f):
-        self._a = verify_unit(a, u.m)
-        self._b = verify_unit(a * (1 - f), u.m)
-        self._f = verify_unit(f, u.one)
+        self._a = verify_unit(a, 'm')
+        self._b = verify_unit(a * (1 - f), 'm')
+        self._f = verify_unit(f, '')
 
     a = read_only_property('_a', 'Semi-major axis')
     b = read_only_property('_b', 'Semi-minor axis')
@@ -49,8 +48,8 @@ class ReferenceEllipsoid(Ellipsoid):
     """
     def __init__(self, a, f, mu, spin):
         super(ReferenceEllipsoid, self).__init__(a=a, f=f)
-        self._mu = verify_unit(mu, u.m ** 3 / u.s ** 2)
-        self._spin = verify_unit(spin, u.rad / u.s)
+        self._mu = verify_unit(mu, 'm3 / s2')
+        self._spin = verify_unit(spin, 'rad / s')
 
     mu = read_only_property('_mu', 'Standard gravitational parameter')
     spin = read_only_property('_spin', 'Angular velocity')

@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 import math
 
 from astropy import units as u
+from astropy.units import Unit
 
 __all__ = (
     'isclose',
@@ -40,7 +41,8 @@ def verify_unit(quantity, unit):
 
     Parameters:
         quantity: Quantity to be verified.
-        unit: Equivalent unit
+        unit: Equivalent unit, or string parsable by
+              :py:class:`astropy.units.Unit`
 
     Raises:
         ValueError: Units are not equivalent.
@@ -57,6 +59,9 @@ def verify_unit(quantity, unit):
     :type quantity: :py:class:`astropy.units.Quantity`
     :type unit: :py:class:`astropy.units.UnitBase`
     """
+    if not isinstance(unit, Unit):
+        unit = Unit(unit)
+
     if unit.is_equivalent((quantity * u.one).unit):
         return quantity
     else:
