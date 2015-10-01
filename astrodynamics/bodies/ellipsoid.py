@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
+from astropy.units import Quantity
 from represent import ReprHelperMixin
 
 from ..constants import (
@@ -32,9 +33,10 @@ class Ellipsoid(ReprHelperMixin, object):
     f = read_only_property('_f', 'Flattening')
 
     def _repr_helper_(self, r):
-        r.keyword_from_attr('a')
-        r.keyword_from_attr('b')
-        r.keyword_from_attr('f')
+        # View as Quantity to prevent full Constant repr.
+        r.keyword_with_value('a', self.a.view(Quantity))
+        r.keyword_with_value('b', self.b.view(Quantity))
+        r.keyword_with_value('f', self.f.view(Quantity))
 
 
 class ReferenceEllipsoid(Ellipsoid):
@@ -56,8 +58,9 @@ class ReferenceEllipsoid(Ellipsoid):
 
     def _repr_helper_(self, r):
         super(ReferenceEllipsoid, self)._repr_helper_(r)
-        r.keyword_from_attr('mu')
-        r.keyword_from_attr('spin')
+        # View as Quantity to prevent full Constant repr.
+        r.keyword_with_value('mu', self.mu.view(Quantity))
+        r.keyword_with_value('spin', self.spin.view(Quantity))
 
 wgs84 = ReferenceEllipsoid(
     a=WGS84_EQUATORIAL_RADIUS,
