@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function
 
 from astropy import units as u  # flake8: noqa
 
-# Absolute import used here so file can be exec'd standalone by documentation helper script.
+# Absolute import used here so file can be exec'd
+# standalone by documentation helper script.
 from astrodynamics.constants import Constant  # flake8: noqa
 
 __all__ = (

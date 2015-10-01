@@ -15,10 +15,16 @@ class Constant(ReprHelperMixin, Quantity):
     These objects are quantities that are meant to represent physical
     constants.
 
+    Parameters:
+        name: The full name of the constant.
+        value: Numerical value of constant
+        unit (str): Units for given value. Must be parsable by
+                    :py:class:`astropy.units.Unit`
+        uncertainty: The known uncertainty in this constant's value.
+        reference: The source used for the value of this constant.
+
     This class is modified from :py:class:`astropy.constants.Constant`. It
     retains the original `license`_.
-
-    .. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY_LICENSE.txt
     """
     def __new__(cls, name, value, unit, uncertainty, reference):
         # By-pass Quantity initialization, since units may not yet be

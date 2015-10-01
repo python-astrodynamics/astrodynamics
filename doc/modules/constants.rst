@@ -4,6 +4,12 @@ Constants
 
 .. currentmodule:: astrodynamics.constants
 
+.. autoclass:: Constant
+   :members: name, uncertainty, reference
+
+List of constants
+=================
+
 =================================  ===================================================================  =============
 Constant                           Value                                                                Uncertainty
 =================================  ===================================================================  =============
@@ -121,3 +127,5 @@ WGS84_FLATTENING                   WGS84 Earth flattening factor                
 WGS84_MU                           WGS84 geocentric gravitational constant          World Geodetic System 1984
 WGS84_ANGULAR_VELOCITY             WGS84 nominal earth mean angular velocity        World Geodetic System 1984
 =================================  ===============================================  ===============================================================
+
+.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY_LICENSE.txt
