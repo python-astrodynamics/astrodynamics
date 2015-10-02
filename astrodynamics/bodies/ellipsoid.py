@@ -21,12 +21,24 @@ class Ellipsoid(ReprHelperMixin, object):
 
     Parameters:
         a: Semi-major axis (equatorial radius) [m]
+        b: Semi-minor axis (polar radius) [m]
         f: Flattening [-]
+
+    Either ``b`` or ``f`` must be specified: the other will be calculated.
     """
-    def __init__(self, a, f):
+    def __init__(self, a, b=None, f=None):
+        if b is None and f is None:
+            raise TypeError('Either b or f must be specified.')
+
         self._a = verify_unit(a, 'm')
-        self._b = verify_unit(a * (1 - f), 'm')
-        self._f = verify_unit(f, '')
+
+        if b is None:
+            self._b = verify_unit(a * (1 - f), 'm')
+            self._f = verify_unit(f, '')
+
+        if f is None:
+            self._b = verify_unit(b, 'm')
+            self._f = verify_unit(1 - (b / a), '')
 
     a = read_only_property('_a', 'Semi-major axis')
     b = read_only_property('_b', 'Semi-minor axis')
