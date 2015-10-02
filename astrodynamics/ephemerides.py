@@ -2,56 +2,40 @@
 from __future__ import absolute_import, division, print_function
 
 import jplephem.spk as spk
+import networkx as nx
 import numpy as np
 
 
-def parent(id):
-    if len(id) == 1:
-        return '0'
-    else:
-        return id[0]
-
-
-def parents(id):
-    if len(id) == 3:
-        return [0, int(id[0]), int(id)]
-    else:
-        return [0, int(id)]
-
-
-def is_child(origin, target):
-    return origin == parent(target)
-
-
-def is_grandchild(origin, target):
-    return origin == parent(parent(target))
-
-
-def is_sibling(origin, target):
-    return parent(origin) == parent(target)
-
-
-def paths(origin, target):
-    if is_child(origin, target):
-        return [int(origin), int(target)], []
-    elif is_sibling(origin, target):
-        p = int(parent(origin))
-        return [p, int(origin)], [p, int(target)]
-    elif is_grandchild(origin, target):
-        return [int(origin), int(parent(target)), int(target)], []
-    else:
-        return parents(origin), parents(target)
-
-
 class JPLEphemeris(object):
-    def __init__(self, spk_file):
-        self.kernel = spk.SPK.open(spk_file)
+    def load_kernel(self, spk_file):
+        self._kernel = spk.SPK.open(spk_file)
+        self.generate_paths()
+
+    def generate_paths(self):
+        graph = nx.Graph()
+        for edge in self.kernel.pairs:
+            graph.add_edge(*edge)
+        self.paths = nx.shortest_path(graph)
+
+    @property
+    def kernel(self):
+        _kernel = getattr(self, '_kernel', None)
+        if not _kernel:
+            raise AttributeError("No SPICE kernel was loaded.")
+        else:
+            return self._kernel
 
     def _compute_segment(self, origin, target, tdb, tdb2):
-        if (origin, target) not in self.kernel.pairs:
+        if (target, origin) in self.kernel.pairs:
+            origin, target = target, origin
+            factor = -1
+        elif (origin, target) in self.kernel.pairs:
+            factor = 1
+        else:
             raise ValueError("Unknown pair({}, {}).".format(origin, target))
         segment = self.kernel[origin, target]
-        return segment.compute_and_differentiate(tdb, tdb2)
+        r, v = segment.compute_and_differentiate(tdb, tdb2)
+        return factor*r, factor*v
 
     def _compute_path(self, path, tdb, tdb2):
         if len(path) == 2:
@@ -66,10 +50,6 @@ class JPLEphemeris(object):
         return r, v
 
     def rv(self, origin, target, tdb, tdb2=0.0):
-        opath, tpath = paths(str(origin), str(target))
-        ro, vo = self._compute_path(opath, tdb, tdb2)
-        if tpath:
-            rt, vt = self._compute_path(tpath, tdb, tdb2)
-            return rt - ro, vt - vo
-        else:
-            return ro, vo
+        path = self.paths[origin][target]
+        r, v = self._compute_path(path, tdb, tdb2)
+        return r, v
