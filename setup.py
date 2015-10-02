@@ -20,6 +20,7 @@ EMAIL = metadata['email']
 requires = [
     'astropy',
     'jplephem>=2.0',
+    'networkx',
     'numpy',
     'represent>=1.4.0',
 ]
