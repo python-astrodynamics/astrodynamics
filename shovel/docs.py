@@ -27,7 +27,7 @@ def watch():
 def gen(skipdirhtml=False):
     """Generate html and dirhtml output."""
     docs_changelog = 'docs/changelog.rst'
-    check_git_unchanged(doc_changelog)
+    check_git_unchanged(docs_changelog)
     pandoc('--from=markdown', '--to=rst', '--output=' + docs_changelog, 'CHANGELOG.md')
     if not skipdirhtml:
         call(['sphinx-build', '-b', 'dirhtml', '-W', '-E', 'docs', 'docs/_build/dirhtml'])
