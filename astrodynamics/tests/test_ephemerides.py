@@ -9,6 +9,7 @@ EARTH_BARYCENTER = '3'
 MARS_BARYCENTER = '4'
 SOLAR_SYSTEM_BARYCENTER = '0'
 
+
 def test_ssb_to_earth_bc():
     opath, tpath = ephemerides.paths(
         SOLAR_SYSTEM_BARYCENTER,
