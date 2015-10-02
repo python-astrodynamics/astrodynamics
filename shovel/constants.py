@@ -167,7 +167,7 @@ def make_documentation(yes=False):
     documentation.
     """
     constants = get_constants_from_data()
-    docfile = Path('doc', 'modules', 'constants.rst')
+    docfile = Path('docs', 'modules', 'constants.rst')
 
     pythondir = Path('astrodynamics', 'constants')
     for pythonfile in pythondir.glob('*.py'):

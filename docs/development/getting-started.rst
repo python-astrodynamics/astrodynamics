@@ -50,24 +50,24 @@ will see one or more ``InterpreterNotFound`` errors.
 Building documentation
 ======================
 
-``astrodynamics`` documentation is stored in the ``doc/`` directory. It is
+``astrodynamics`` documentation is stored in the ``docs/`` directory. It is
 written in `reStructured Text`_ and rendered using `Sphinx`_.
 
 Use `shovel`_ to build the documentation. For example:
 
 .. code-block:: console
 
-    $ shovel doc.gen
+    $ shovel docs.gen
     ...
 
 The HTML documentation index can now be found at
-``doc/_build/html/index.html``.
+``docs/_build/html/index.html``.
 
 The documentation can be re-built as-you-edit like so:
 
 .. code-block:: console
 
-    $ shovel doc.watch
+    $ shovel docs.watch
     ...
 
 Adding/modifying constants
