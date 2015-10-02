@@ -13,6 +13,7 @@ __all__ = (
     'earth',
 )
 
+
 class CelestialBody(ReprHelperMixin, object):
     """Celestial body.
 

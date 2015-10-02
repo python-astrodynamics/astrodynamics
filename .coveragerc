@@ -1,0 +1,9 @@
+[run]
+branch = True
+source =
+    astrodynamics
+
+[paths]
+source =
+    astrodynamics
+    .tox/*/lib/python*/site-packages/astrodynamics
