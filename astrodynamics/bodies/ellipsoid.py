@@ -35,7 +35,6 @@ class Ellipsoid(ReprHelperMixin, object):
     def _repr_helper_(self, r):
         # View as Quantity to prevent full Constant repr.
         r.keyword_with_value('a', self.a.view(Quantity))
-        r.keyword_with_value('b', self.b.view(Quantity))
         r.keyword_with_value('f', self.f.view(Quantity))
 
 
