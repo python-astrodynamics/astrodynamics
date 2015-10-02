@@ -35,7 +35,7 @@ class JPLEphemeris(object):
             raise ValueError("Unknown pair({}, {}).".format(origin, target))
         segment = self.kernel[origin, target]
         r, v = segment.compute_and_differentiate(tdb, tdb2)
-        return factor*r, factor*v
+        return factor * r, factor * v
 
     def _compute_path(self, path, tdb, tdb2):
         if len(path) == 2:
