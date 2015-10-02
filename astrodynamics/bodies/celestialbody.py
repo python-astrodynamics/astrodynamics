@@ -18,7 +18,15 @@ from .ellipsoid import Ellipsoid, wgs84
 
 __all__ = (
     'CelestialBody',
+    'mercury',
+    'venus',
     'earth',
+    'mars',
+    'jupiter',
+    'saturn',
+    'uranus',
+    'neptune',
+    'pluto',
 )
 
 
