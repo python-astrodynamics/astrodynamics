@@ -27,8 +27,12 @@ __all__ = (
     'MASS_RATIO_CERES_TO_SUN',
     'MASS_RATIO_PALLAS_TO_SUN',
     'MASS_RATIO_VESTA_TO_SUN',
+    'MERCURY_RADIUS_MEAN',
     'MERCURY_RADIUS_EQUATORIAL',
+    'MERCURY_RADIUS_POLAR',
+    'VENUS_RADIUS_MEAN',
     'VENUS_RADIUS_EQUATORIAL',
+    'VENUS_RADIUS_POLAR',
     'EARTH_RADIUS_MEAN',
     'EARTH_RADIUS_POLAR',
     'MARS_RADIUS_MEAN',
@@ -46,7 +50,9 @@ __all__ = (
     'NEPTUNE_RADIUS_MEAN',
     'NEPTUNE_RADIUS_EQUATORIAL',
     'NEPTUNE_RADIUS_POLAR',
+    'PLUTO_RADIUS_MEAN',
     'PLUTO_RADIUS_EQUATORIAL',
+    'PLUTO_RADIUS_POLAR',
     'MOON_RADIUS_MEAN',
     'MOON_RADIUS_EQUATORIAL',
     'MOON_RADIUS_POLAR',
@@ -197,6 +203,13 @@ MASS_RATIO_VESTA_TO_SUN = Constant(
     uncertainty=3e-12,
     reference='IAU 2009/2012 System of Astronomical Constants')
 
+MERCURY_RADIUS_MEAN = Constant(
+    name='Mean radius of Mercury',
+    value=2439.9,
+    unit='km',
+    uncertainty=1,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
 MERCURY_RADIUS_EQUATORIAL = Constant(
     name='Equatorial radius of Mercury',
     value=2439.9,
@@ -204,8 +217,29 @@ MERCURY_RADIUS_EQUATORIAL = Constant(
     uncertainty=1,
     reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
 
+MERCURY_RADIUS_POLAR = Constant(
+    name='Polar radius of Mercury',
+    value=2439.9,
+    unit='km',
+    uncertainty=1,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
+VENUS_RADIUS_MEAN = Constant(
+    name='Mean radius of Venus',
+    value=6051.8,
+    unit='km',
+    uncertainty=1,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
 VENUS_RADIUS_EQUATORIAL = Constant(
     name='Equatorial radius of Venus',
+    value=6051.8,
+    unit='km',
+    uncertainty=1,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
+VENUS_RADIUS_POLAR = Constant(
+    name='Polar radius of Venus',
     value=6051.8,
     unit='km',
     uncertainty=1,
@@ -330,8 +364,22 @@ NEPTUNE_RADIUS_POLAR = Constant(
     uncertainty=30,
     reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
 
+PLUTO_RADIUS_MEAN = Constant(
+    name='Mean radius of Pluto (134340)',
+    value=1195,
+    unit='km',
+    uncertainty=5,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
 PLUTO_RADIUS_EQUATORIAL = Constant(
     name='Equatorial radius of Pluto (134340)',
+    value=1195,
+    unit='km',
+    uncertainty=5,
+    reference='IAU WG on Cartographic Coordinates and Rotational Elements 2009')
+
+PLUTO_RADIUS_POLAR = Constant(
+    name='Polar radius of Pluto (134340)',
     value=1195,
     unit='km',
     uncertainty=5,

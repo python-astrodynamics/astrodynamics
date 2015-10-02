@@ -32,8 +32,12 @@ MASS_RATIO_SUN_TO_PLUTO            :math:`1.36566 \times 10^{8} \; \mathrm{}`   
 MASS_RATIO_CERES_TO_SUN            :math:`4.72 \times 10^{-10} \; \mathrm{}`                            3e-12
 MASS_RATIO_PALLAS_TO_SUN           :math:`1.03 \times 10^{-10} \; \mathrm{}`                            3e-12
 MASS_RATIO_VESTA_TO_SUN            :math:`1.35 \times 10^{-10} \; \mathrm{}`                            3e-12
+MERCURY_RADIUS_MEAN                :math:`2439.9 \; \mathrm{km}`                                        1
 MERCURY_RADIUS_EQUATORIAL          :math:`2439.9 \; \mathrm{km}`                                        1
+MERCURY_RADIUS_POLAR               :math:`2439.9 \; \mathrm{km}`                                        1
+VENUS_RADIUS_MEAN                  :math:`6051.8 \; \mathrm{km}`                                        1
 VENUS_RADIUS_EQUATORIAL            :math:`6051.8 \; \mathrm{km}`                                        1
+VENUS_RADIUS_POLAR                 :math:`6051.8 \; \mathrm{km}`                                        1
 EARTH_RADIUS_MEAN                  :math:`6371.0084 \; \mathrm{km}`                                     0.0001
 EARTH_RADIUS_POLAR                 :math:`6356.7519 \; \mathrm{km}`                                     0.0001
 MARS_RADIUS_MEAN                   :math:`3389.5 \; \mathrm{km}`                                        0.2
@@ -51,7 +55,9 @@ URANUS_RADIUS_POLAR                :math:`24973 \; \mathrm{km}`                 
 NEPTUNE_RADIUS_MEAN                :math:`24622 \; \mathrm{km}`                                         19
 NEPTUNE_RADIUS_EQUATORIAL          :math:`24764 \; \mathrm{km}`                                         15
 NEPTUNE_RADIUS_POLAR               :math:`24341 \; \mathrm{km}`                                         30
+PLUTO_RADIUS_MEAN                  :math:`1195 \; \mathrm{km}`                                          5
 PLUTO_RADIUS_EQUATORIAL            :math:`1195 \; \mathrm{km}`                                          5
+PLUTO_RADIUS_POLAR                 :math:`1195 \; \mathrm{km}`                                          5
 MOON_RADIUS_MEAN                   :math:`1737.4 \; \mathrm{km}`                                        1
 MOON_RADIUS_EQUATORIAL             :math:`1737.4 \; \mathrm{km}`                                        1
 MOON_RADIUS_POLAR                  :math:`1737.4 \; \mathrm{km}`                                        1
@@ -98,8 +104,12 @@ MASS_RATIO_SUN_TO_PLUTO            Mass ratio: Sun to Pluto (134340)            
 MASS_RATIO_CERES_TO_SUN            Mass ratio: Ceres to Sun                         IAU 2009/2012 System of Astronomical Constants
 MASS_RATIO_PALLAS_TO_SUN           Mass ratio: Pallas to Sun                        IAU 2009/2012 System of Astronomical Constants
 MASS_RATIO_VESTA_TO_SUN            Mass ratio: Vesta to Sun                         IAU 2009/2012 System of Astronomical Constants
+MERCURY_RADIUS_MEAN                Mean radius of Mercury                           IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MERCURY_RADIUS_EQUATORIAL          Equatorial radius of Mercury                     IAU WG on Cartographic Coordinates and Rotational Elements 2009
+MERCURY_RADIUS_POLAR               Polar radius of Mercury                          IAU WG on Cartographic Coordinates and Rotational Elements 2009
+VENUS_RADIUS_MEAN                  Mean radius of Venus                             IAU WG on Cartographic Coordinates and Rotational Elements 2009
 VENUS_RADIUS_EQUATORIAL            Equatorial radius of Venus                       IAU WG on Cartographic Coordinates and Rotational Elements 2009
+VENUS_RADIUS_POLAR                 Polar radius of Venus                            IAU WG on Cartographic Coordinates and Rotational Elements 2009
 EARTH_RADIUS_MEAN                  Mean radius of Earth                             IAU WG on Cartographic Coordinates and Rotational Elements 2009
 EARTH_RADIUS_POLAR                 Polar radius of Earth                            IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MARS_RADIUS_MEAN                   Mean radius of Mars                              IAU WG on Cartographic Coordinates and Rotational Elements 2009
@@ -117,7 +127,9 @@ URANUS_RADIUS_POLAR                Polar radius of Uranus                       
 NEPTUNE_RADIUS_MEAN                Mean radius of Neptune                           IAU WG on Cartographic Coordinates and Rotational Elements 2009
 NEPTUNE_RADIUS_EQUATORIAL          Equatorial radius of Neptune                     IAU WG on Cartographic Coordinates and Rotational Elements 2009
 NEPTUNE_RADIUS_POLAR               Polar radius of Neptune                          IAU WG on Cartographic Coordinates and Rotational Elements 2009
+PLUTO_RADIUS_MEAN                  Mean radius of Pluto (134340)                    IAU WG on Cartographic Coordinates and Rotational Elements 2009
 PLUTO_RADIUS_EQUATORIAL            Equatorial radius of Pluto (134340)              IAU WG on Cartographic Coordinates and Rotational Elements 2009
+PLUTO_RADIUS_POLAR                 Polar radius of Pluto (134340)                   IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MOON_RADIUS_MEAN                   Mean radius of Moon                              IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MOON_RADIUS_EQUATORIAL             Equatorial radius of Moon                        IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MOON_RADIUS_POLAR                  Polar radius of Moon                             IAU WG on Cartographic Coordinates and Rotational Elements 2009

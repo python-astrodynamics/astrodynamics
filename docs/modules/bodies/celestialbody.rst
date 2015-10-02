@@ -12,6 +12,22 @@ Celestial Bodies
 Predefined Celestial Bodies
 ===========================
 
+.. data:: mercury
+
+.. data:: venus
+
 .. data:: earth
 
-	A :py:class:`CelestialBody` iniated with the :py:data:`~astrodynamics.bodies.ellipsoid.wgs84` reference ellipsoid and ``EARTH_MASS`` from :py:mod:`astrodynamics.constants`
+	A :py:class:`CelestialBody` initialised from the :py:data:`~astrodynamics.bodies.ellipsoid.wgs84` reference ellipsoid.
+
+.. data:: mars
+
+.. data:: jupiter
+
+.. data:: saturn
+
+.. data:: uranus
+
+.. data:: neptune
+
+.. data:: pluto
