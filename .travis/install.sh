@@ -26,8 +26,8 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
             pyenv global 3.3.6
             ;;
         py34)
-            pyenv install 3.4.2
-            pyenv global 3.4.2
+            pyenv install 3.4.3
+            pyenv global 3.4.3
             ;;
         py35)
             pyenv install 3.5.0
