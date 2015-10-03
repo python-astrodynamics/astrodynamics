@@ -39,14 +39,15 @@ class CelestialBody(ReprHelperMixin, object):
 
     :type ellipsoid: :py:class:`~astrodynamics.bodies.ellipsoid.Ellipsoid`
     """
-    def __init__(self, ellipsoid, mu):
+    def __init__(self, name, ellipsoid, mu):
+        self.name = name
         self._ellipsoid = ellipsoid
         self._mu = verify_unit(mu, 'm3 / s2')
 
         self._mass = verify_unit(mu / CONSTANT_OF_GRAVITATION, 'kg')
 
     @classmethod
-    def from_reference_ellipsoid(cls, ellipsoid):
+    def from_reference_ellipsoid(cls, name, ellipsoid):
         """Construct from a
         :py:class:`~astrodynamics.bodies.ellipsoid.ReferenceEllipsoid`, which
         provides ``mu``.
@@ -56,7 +57,7 @@ class CelestialBody(ReprHelperMixin, object):
 
         :type ellipsoid: :py:class:`~astrodynamics.bodies.ellipsoid.ReferenceEllipsoid`
         """
-        return cls(ellipsoid=ellipsoid, mu=ellipsoid.mu)
+        return cls(name=name, ellipsoid=ellipsoid, mu=ellipsoid.mu)
 
     ellipsoid = read_only_property('_ellipsoid')
     mu = read_only_property('_mu')
@@ -70,35 +71,43 @@ class CelestialBody(ReprHelperMixin, object):
 G = CONSTANT_OF_GRAVITATION
 
 mercury = CelestialBody(
+    name='Mercury',
     ellipsoid=Ellipsoid(a=MERCURY_RADIUS_EQUATORIAL, b=MERCURY_RADIUS_POLAR),
     mu=G * MERCURY_MASS)
 
 venus = CelestialBody(
+    name='Venus',
     ellipsoid=Ellipsoid(a=VENUS_RADIUS_EQUATORIAL, b=VENUS_RADIUS_POLAR),
     mu=G * VENUS_MASS)
 
-earth = CelestialBody.from_reference_ellipsoid(ellipsoid=wgs84)
+earth = CelestialBody.from_reference_ellipsoid(name='Earth', ellipsoid=wgs84)
 
 mars = CelestialBody(
+    name='Mars',
     ellipsoid=Ellipsoid(a=MARS_RADIUS_EQUATORIAL, b=MARS_RADIUS_POLAR),
     mu=G * MARS_MASS)
 
 jupiter = CelestialBody(
+    name='Jupiter',
     ellipsoid=Ellipsoid(a=JUPITER_RADIUS_EQUATORIAL, b=JUPITER_RADIUS_POLAR),
     mu=G * JUPITER_MASS)
 
 saturn = CelestialBody(
+    name='Saturn',
     ellipsoid=Ellipsoid(a=SATURN_RADIUS_EQUATORIAL, b=SATURN_RADIUS_POLAR),
     mu=G * SATURN_MASS)
 
 uranus = CelestialBody(
+    name='Uranus',
     ellipsoid=Ellipsoid(a=URANUS_RADIUS_EQUATORIAL, b=URANUS_RADIUS_POLAR),
     mu=G * URANUS_MASS)
 
 neptune = CelestialBody(
+    name='Neptune',
     ellipsoid=Ellipsoid(a=NEPTUNE_RADIUS_EQUATORIAL, b=NEPTUNE_RADIUS_POLAR),
     mu=G * NEPTUNE_MASS)
 
 pluto = CelestialBody(
+    name='Pluto',
     ellipsoid=Ellipsoid(a=PLUTO_RADIUS_EQUATORIAL, b=PLUTO_RADIUS_POLAR),
     mu=G * PLUTO_MASS)
