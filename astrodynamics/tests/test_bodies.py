@@ -1,13 +1,14 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
+import pytest
 from astropy import units as u
 
 from astrodynamics.bodies import (
     CelestialBody, Ellipsoid, ReferenceEllipsoid, wgs84)
 from astrodynamics.constants import (
-    EARTH_MASS, GEOCENTRIC_GRAVITATIONAL_CONSTANT, WGS84_ANGULAR_VELOCITY,
-    WGS84_EQUATORIAL_RADIUS, WGS84_FLATTENING, WGS84_MU)
+    EARTH_MASS, GEOCENTRIC_GRAVITATIONAL_CONSTANT, WGS84_EQUATORIAL_RADIUS,
+    WGS84_FLATTENING)
 from astrodynamics.util import qisclose
 
 
@@ -20,6 +21,13 @@ def test_ellipsoid():
 
     assert qisclose(wgs84_ellipsoid1.b, wgs84_ellipsoid2.b)
     assert qisclose(wgs84_ellipsoid1.f, wgs84_ellipsoid2.f)
+
+    with pytest.raises(TypeError):
+        Ellipsoid(a=WGS84_EQUATORIAL_RADIUS)
+
+    with pytest.raises(TypeError):
+        Ellipsoid(a=WGS84_EQUATORIAL_RADIUS, b=wgs84_polar_radius,
+                  f=WGS84_FLATTENING)
 
 
 def test_ellipsoid_repr():

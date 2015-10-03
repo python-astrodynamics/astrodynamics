@@ -27,8 +27,8 @@ class Ellipsoid(ReprHelperMixin, object):
     Either ``b`` or ``f`` must be specified: the other will be calculated.
     """
     def __init__(self, a, b=None, f=None):
-        if b is None and f is None:
-            raise TypeError('Either b or f must be specified.')
+        if (b is None and f is None) or (b and f):
+            raise TypeError('Either b or f must be specified, but not both.')
 
         self._a = verify_unit(a, 'm')
 
