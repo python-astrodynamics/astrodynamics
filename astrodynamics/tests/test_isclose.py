@@ -139,7 +139,6 @@ def test_integers(a, b, isclose_function):
     assert not isclose_function(a, b, rel_tol=1e-9)
 
 
-# @pytest.mark.xfail('isclose_function')
 @pytest.mark.parametrize('a, b', decimal_examples)
 def test_decimals(a, b, isclose_function):
     if isclose_function is _isclose:
