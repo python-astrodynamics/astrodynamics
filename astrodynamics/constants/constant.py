@@ -57,7 +57,10 @@ class Constant(ReprHelperMixin, Quantity):
         """
         return self
 
-    __deepcopy__ = __copy__ = copy
+    __copy__ = copy
+
+    def __deepcopy__(self, memo):
+        return self.copy()
 
     name = read_only_property('_name', 'The full name of the constant.')
 
@@ -77,5 +80,5 @@ class Constant(ReprHelperMixin, Quantity):
 
     def __array_finalize__(self, obj):
         for attr in ('_name', '_value', '_unit_string',
-                     '_uncertainty', '_reference', '_system'):
+                     '_uncertainty', '_reference'):
             setattr(self, attr, getattr(obj, attr, None))
