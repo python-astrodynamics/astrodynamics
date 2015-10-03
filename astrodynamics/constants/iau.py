@@ -24,9 +24,6 @@ __all__ = (
     'MASS_RATIO_SUN_TO_URANUS',
     'MASS_RATIO_SUN_TO_NEPTUNE',
     'MASS_RATIO_SUN_TO_PLUTO',
-    'MASS_RATIO_CERES_TO_SUN',
-    'MASS_RATIO_PALLAS_TO_SUN',
-    'MASS_RATIO_VESTA_TO_SUN',
     'MERCURY_RADIUS_MEAN',
     'MERCURY_RADIUS_EQUATORIAL',
     'MERCURY_RADIUS_POLAR',
@@ -180,27 +177,6 @@ MASS_RATIO_SUN_TO_PLUTO = Constant(
     value=1.36566e8,
     unit='',
     uncertainty=2.8e4,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
-MASS_RATIO_CERES_TO_SUN = Constant(
-    name='Mass ratio: Ceres to Sun',
-    value=4.72e-10,
-    unit='',
-    uncertainty=3e-12,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
-MASS_RATIO_PALLAS_TO_SUN = Constant(
-    name='Mass ratio: Pallas to Sun',
-    value=1.03e-10,
-    unit='',
-    uncertainty=3e-12,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
-MASS_RATIO_VESTA_TO_SUN = Constant(
-    name='Mass ratio: Vesta to Sun',
-    value=1.35e-10,
-    unit='',
-    uncertainty=3e-12,
     reference='IAU 2009/2012 System of Astronomical Constants')
 
 MERCURY_RADIUS_MEAN = Constant(

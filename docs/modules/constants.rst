@@ -29,9 +29,6 @@ MASS_RATIO_SUN_TO_SATURN           :math:`3497.9018 \; \mathrm{}`               
 MASS_RATIO_SUN_TO_URANUS           :math:`22902.98 \; \mathrm{}`                                        0.03
 MASS_RATIO_SUN_TO_NEPTUNE          :math:`19412.26 \; \mathrm{}`                                        0.03
 MASS_RATIO_SUN_TO_PLUTO            :math:`1.36566 \times 10^{8} \; \mathrm{}`                           28000.0
-MASS_RATIO_CERES_TO_SUN            :math:`4.72 \times 10^{-10} \; \mathrm{}`                            3e-12
-MASS_RATIO_PALLAS_TO_SUN           :math:`1.03 \times 10^{-10} \; \mathrm{}`                            3e-12
-MASS_RATIO_VESTA_TO_SUN            :math:`1.35 \times 10^{-10} \; \mathrm{}`                            3e-12
 MERCURY_RADIUS_MEAN                :math:`2439.9 \; \mathrm{km}`                                        1
 MERCURY_RADIUS_EQUATORIAL          :math:`2439.9 \; \mathrm{km}`                                        1
 MERCURY_RADIUS_POLAR               :math:`2439.9 \; \mathrm{km}`                                        1
@@ -101,9 +98,6 @@ MASS_RATIO_SUN_TO_SATURN           Mass ratio: Sun to Saturn                    
 MASS_RATIO_SUN_TO_URANUS           Mass ratio: Sun to Uranus                        IAU 2009/2012 System of Astronomical Constants
 MASS_RATIO_SUN_TO_NEPTUNE          Mass ratio: Sun to Neptune                       IAU 2009/2012 System of Astronomical Constants
 MASS_RATIO_SUN_TO_PLUTO            Mass ratio: Sun to Pluto (134340)                IAU 2009/2012 System of Astronomical Constants
-MASS_RATIO_CERES_TO_SUN            Mass ratio: Ceres to Sun                         IAU 2009/2012 System of Astronomical Constants
-MASS_RATIO_PALLAS_TO_SUN           Mass ratio: Pallas to Sun                        IAU 2009/2012 System of Astronomical Constants
-MASS_RATIO_VESTA_TO_SUN            Mass ratio: Vesta to Sun                         IAU 2009/2012 System of Astronomical Constants
 MERCURY_RADIUS_MEAN                Mean radius of Mercury                           IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MERCURY_RADIUS_EQUATORIAL          Equatorial radius of Mercury                     IAU WG on Cartographic Coordinates and Rotational Elements 2009
 MERCURY_RADIUS_POLAR               Polar radius of Mercury                          IAU WG on Cartographic Coordinates and Rotational Elements 2009

@@ -110,27 +110,6 @@ MASS_RATIO_SUN_TO_PLUTO = Constant(
     uncertainty=2.8e4,
     reference='IAU 2009/2012 System of Astronomical Constants')
 
-MASS_RATIO_CERES_TO_SUN = Constant(
-    name='Mass ratio: Ceres to Sun',
-    value=4.72e-10,
-    unit='',
-    uncertainty=3e-12,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
-MASS_RATIO_PALLAS_TO_SUN = Constant(
-    name='Mass ratio: Pallas to Sun',
-    value=1.03e-10,
-    unit='',
-    uncertainty=3e-12,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
-MASS_RATIO_VESTA_TO_SUN = Constant(
-    name='Mass ratio: Vesta to Sun',
-    value=1.35e-10,
-    unit='',
-    uncertainty=3e-12,
-    reference='IAU 2009/2012 System of Astronomical Constants')
-
 MERCURY_RADIUS_MEAN = Constant(
     name='Mean radius of Mercury',
     value=2439.9,
