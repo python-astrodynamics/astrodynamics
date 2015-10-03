@@ -9,7 +9,7 @@ import astropy.units as u
 from astropy.units import Quantity
 
 import astrodynamics.constants as const
-from astrodynamics.constants import Constant, J2
+from astrodynamics.constants import J2, Constant
 
 
 def test_units():
@@ -65,3 +65,10 @@ def test_view():
 
     x4 = Quantity(x, subok=True, copy=False)
     assert x4 is x
+
+
+def test_repr():
+    a = Constant('the name', value=1, unit='m2', uncertainty=0.1, reference='me')
+    s = ("Constant(name='the name', value=1, unit='m2', uncertainty=0.1, "
+         "reference='me')")
+    assert repr(a) == s

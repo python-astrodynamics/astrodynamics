@@ -8,8 +8,8 @@ from astrodynamics.util import verify_unit
 
 
 def test_verify_unit():
-    # Implicit dimensionless values are allowed
-    verify_unit(0, u.one)
+    # Implicit dimensionless values are allowed, test that Quantity is returned.
+    assert verify_unit(0, u.one) == 0 * u.one
 
     # Test failure mode
     with pytest.raises(ValueError):
