@@ -2,7 +2,7 @@
 from __future__ import absolute_import, division, print_function
 
 from astropy import units as u
-from astropy.units import Unit
+from astropy.units import UnitBase
 
 from .compat.math import isclose
 
@@ -59,7 +59,7 @@ def verify_unit(quantity, unit):
                 self.a = verify_unit(a, astropy.units.m)
 
     """
-    if not isinstance(unit, Unit):
+    if not isinstance(unit, UnitBase):
         unit = Unit(unit)
 
     q = quantity * u.one
