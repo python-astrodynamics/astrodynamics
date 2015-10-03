@@ -64,6 +64,7 @@ class CelestialBody(ReprHelperMixin, object):
     mass = read_only_property('_mass')
 
     def _repr_helper_(self, r):
+        r.keyword_from_attr('name')
         r.keyword_from_attr('ellipsoid')
         # View as Quantity to prevent full Constant repr.
         r.keyword_with_value('mu', self.mu.view(Quantity))
