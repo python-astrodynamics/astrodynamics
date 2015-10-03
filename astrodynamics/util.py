@@ -70,6 +70,13 @@ def verify_unit(quantity, unit):
             "Unit '{}' not equivalent to quantity '{}'.".format(unit, quantity))
 
 
+def qisclose(a, b, rel_tol=1e-9, abs_tol=0.0):
+    """Helper function for using isclose with
+    :py:class:`~astropy.units.Quantity` objects.
+    """
+    return isclose(a.si.value, b.si.value, rel_tol, abs_tol)
+
+
 def isclose(a, b, rel_tol=1e-9, abs_tol=0.0):
     """
     Returns True if `a` is close in value to `b`. False otherwise
