@@ -40,7 +40,8 @@ def verify_unit(quantity, unit):
     """Verify unit of passed quantity and return it.
 
     Parameters:
-        quantity: Quantity to be verified.
+        quantity: :py:class:`~astropy.units.Quantity` to be verified. Bare
+                  numbers are valid if the unit is dimensionless.
         unit: Equivalent unit, or string parsable by
               :py:class:`astropy.units.Unit`
 
@@ -48,7 +49,8 @@ def verify_unit(quantity, unit):
         ValueError: Units are not equivalent.
 
     Returns:
-        quantity parameter, unchanged.
+        ``quantity`` unchanged. Bare numbers will be converted to a dimensionless
+        :py:class:`~astropy.units.Quantity`.
 
     Example:
         .. code-block:: python
@@ -56,14 +58,13 @@ def verify_unit(quantity, unit):
             def __init__(self, a):
                 self.a = verify_unit(a, astropy.units.m)
 
-    :type quantity: :py:class:`astropy.units.Quantity`
-    :type unit: :py:class:`astropy.units.UnitBase`
     """
     if not isinstance(unit, Unit):
         unit = Unit(unit)
 
-    if unit.is_equivalent((quantity * u.one).unit):
-        return quantity
+    q = quantity * u.one
+    if unit.is_equivalent(q.unit):
+        return q
     else:
         raise ValueError(
             "Unit '{}' not equivalent to quantity '{}'.".format(unit, quantity))
