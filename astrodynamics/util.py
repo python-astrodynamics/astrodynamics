@@ -91,7 +91,7 @@ def isclose(a, b, rel_tol=1e-9, abs_tol=0.0):
     only close to themselves.
 
     The function can be used with any type that supports comparison,
-    substratcion and multiplication, including Decimal, Fraction, and
+    subtraction and multiplication, including Decimal, Fraction, and
     Complex
 
     Complex values are compared based on their absolute value.

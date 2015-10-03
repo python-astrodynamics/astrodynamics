@@ -6,8 +6,8 @@ Ellipsoids
 .. importfrom:: astrodynamics.bodies
 
 .. automodule:: astrodynamics.bodies.ellipsoid
-	:members:
-	:show-inheritance:
+   :members:
+   :show-inheritance:
 
 Predefined Reference Ellipsoids
 ===============================

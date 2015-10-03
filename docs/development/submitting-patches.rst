@@ -6,7 +6,8 @@ Submitting patches
 * Patches should be small to facilitate easier review. `Studies have shown`_
   that review quality falls off as patch size grows. Sometimes this will result
   in many small PRs to land a single large feature.
-* Ideally, larger changes should be discussed in a GitHub issue before submission.
+* Ideally, larger changes should be discussed in a GitHub issue before
+  submission.
 * New features and significant bug fixes should be documented in the
   :doc:`/changelog`.
 * You must have legal permission to distribute any code you contribute to
@@ -41,8 +42,9 @@ All code changes must be accompanied by unit tests.
 Documentation
 =============
 
-Docstrings should be written for `Sphinx`_. `Readability counts`_, so Google-style
-docstrings as parsed by the Sphinx `Napoleon`_ extension are encouraged.
+Docstrings should be written for `Sphinx`_. `Readability counts`_, so
+Google-style docstrings as parsed by the Sphinx `Napoleon`_ extension are
+encouraged.
 
 For example::
 
@@ -62,7 +64,8 @@ For example::
 So, specifically:
 
 * Always use three double quotes.
-* Unless the entire docstring fits on a line, place the closing quotes on a line by themselves. 
+* Unless the entire docstring fits on a line, place the closing quotes on a
+  line by themselves.
 * No blank line at the end.
 * Use Google-style docstrings for the Sphinx `Napoleon`_ extension.
 

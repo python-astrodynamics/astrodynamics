@@ -3,11 +3,14 @@ Development
 
 .. note::
 
-	This section of the documentation is based off of PyCA's ``cryptography`` documentation. It retains the original `license`_.
+   This section of the documentation is based off of PyCA's ``cryptography``
+   documentation. It retains the original `license`_.
 
-``astrodynamics`` recommends the following guidelines for contributing to the project.
+``astrodynamics`` recommends the following guidelines for contributing to the
+project.
 
-Bugs and feature requests can be filed as issues on `GitHub`_. For general information, please read `contribution-guide.org`_.
+Bugs and feature requests can be filed as issues on `GitHub`_. For general
+information, please read `contribution-guide.org`_.
 
 .. toctree::
     :maxdepth: 2

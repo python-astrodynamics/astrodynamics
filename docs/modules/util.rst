@@ -3,5 +3,5 @@ Utilities
 *********
 
 .. automodule:: astrodynamics.util
-	:members:
-	:show-inheritance:
+   :members:
+   :show-inheritance:

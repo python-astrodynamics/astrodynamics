@@ -6,8 +6,8 @@ Celestial Bodies
 .. importfrom:: astrodynamics.bodies
 
 .. automodule:: astrodynamics.bodies.celestialbody
-	:members:
-	:show-inheritance:
+   :members:
+   :show-inheritance:
 
 Predefined Celestial Bodies
 ===========================
@@ -18,7 +18,7 @@ Predefined Celestial Bodies
 
 .. data:: earth
 
-	A :py:class:`CelestialBody` initialised from the :py:data:`~astrodynamics.bodies.ellipsoid.wgs84` reference ellipsoid.
+   A :py:class:`CelestialBody` initialised from the :py:data:`~astrodynamics.bodies.ellipsoid.wgs84` reference ellipsoid.
 
 .. data:: mars
 

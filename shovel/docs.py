@@ -7,6 +7,9 @@ from subprocess import call
 
 from plumbum.cmd import pandoc
 from shovel import task
+from watchdog.observers import Observer
+from watchdog.tricks import ShellCommandTrick
+from watchdog.watchmedo import observe_with
 
 from _helpers import check_git_unchanged
 
@@ -18,9 +21,14 @@ def watch():
     # Start with a clean build
     call(['sphinx-build', '-b', 'html', '-E', 'docs', 'docs/_build/html'])
 
-    call(['watchmedo', 'shell-command', '--patterns=*.rst;*.py',
-          '--ignore-pattern=_build/*', '--recursive',
-          '--command=sphinx-build -b html docs docs/_build/html'])
+    handler = ShellCommandTrick(
+        shell_command='sphinx-build -b html docs docs/_build/html',
+        patterns=['*.rst', '*.py'],
+        ignore_patterns=['_build/*'],
+        ignore_directories=['.tox'],
+        drop_during_process=True)
+    observer = Observer()
+    observe_with(observer, handler, pathnames=['.'], recursive=True)
 
 
 @task

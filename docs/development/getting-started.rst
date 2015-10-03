@@ -5,23 +5,23 @@ Getting started
 Working on ``astrodynamics`` requires the installation of some
 development dependencies. These can be installed in a `virtualenv`_
 using `pip`_ with the ``dev`` extras. You should install
-``astrodynamics`` in ``editable`` mode. 
+``astrodynamics`` in ``editable`` mode.
 
 For example:
 
 .. code-block:: console
 
     $ # Create a virtualenv and activate it
-    $ pip install --editable .[dev] 
+    $ pip install --editable .[dev]
 
 You are now ready to run the tests and build the documentation.
 
 Running tests
 =============
 
-``astrodynamics`` unit tests are found in the ``astrodynamics/tests/`` directory and are
-designed to be run using `pytest`_. `pytest`_ will discover the tests
-automatically, so all you have to do is:
+``astrodynamics`` unit tests are found in the ``astrodynamics/tests/``
+directory and are designed to be run using `pytest`_. `pytest`_ will discover
+the tests automatically, so all you have to do is:
 
 .. code-block:: console
 
@@ -73,9 +73,13 @@ The documentation can be re-built as-you-edit like so:
 Adding/modifying constants
 ==========================
 
-The constants package is created from source files stored in ``data/constants``. Each text file becomes a module in ``astrodynamics/constants``. Users import all constants directly from :mod:`astrodynamics.constants`, but the modules are used for organisation.
+The constants package is created from source files stored in
+``data/constants``. Each text file becomes a module in
+``astrodynamics/constants``. Users import all constants directly from
+:mod:`astrodynamics.constants`, but the modules are used for organisation.
 
-After editing the data files, the constants can be updated with the following commands:
+After editing the data files, the constants can be updated with the following
+commands:
 
 .. code-block:: console
 
@@ -97,7 +101,8 @@ After editing the data files, the constants can be updated with the following co
 Import order
 ============
 
-A consistent import order is used in ``astrodynamics``. The order is as follows:
+A consistent import order is used in ``astrodynamics``. The order is as
+follows:
 
 - ``from __future__ import ...``
 - Standard library
@@ -105,14 +110,16 @@ A consistent import order is used in ``astrodynamics``. The order is as follows:
 - Current project [#]_
 - Local imports (``from . import ...``, ``from .module import ...``)
 
-This order, and the formatting of the imports, can be enforced by running the following commands:
+This order, and the formatting of the imports, can be enforced by running the
+following commands:
 
 .. code-block:: console
 
     $ shovel code.format_imports
     ...
 
-.. [#] Although this order is enforced, within ``astrodynamics/``, use relative imports rather than absolute imports:
+.. [#] Although this order is enforced, within ``astrodynamics/``, use relative
+   imports rather than absolute imports:
 
    .. code-block:: python
 
