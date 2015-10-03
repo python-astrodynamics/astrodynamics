@@ -71,7 +71,7 @@ def verify_unit(quantity, unit):
 
 
 def qisclose(a, b, rel_tol=1e-9, abs_tol=0.0):
-    """Helper function for using isclose with
+    """Helper function for using :py:func:`math.isclose` with
     :py:class:`~astropy.units.Quantity` objects.
     """
     return isclose(a.si.value, b.si.value, rel_tol=rel_tol, abs_tol=abs_tol)
