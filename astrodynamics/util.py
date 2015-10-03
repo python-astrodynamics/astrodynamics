@@ -2,7 +2,7 @@
 from __future__ import absolute_import, division, print_function
 
 from astropy import units as u
-from astropy.units import UnitBase
+from astropy.units import Unit, UnitBase
 
 from .compat.math import isclose
 
