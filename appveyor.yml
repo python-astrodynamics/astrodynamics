@@ -22,7 +22,6 @@ environment:
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x" # currently 2.7.9
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.0"
       TOXENV: "py27"
       TOXPYTHON: "C:\\Python27-x64\\python.exe"
 
@@ -35,7 +34,6 @@ environment:
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.x" # currently 3.3.5
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.1"
       TOXENV: "py33"
       TOXPYTHON: "C:\\Python33-x64\\python.exe"
 
@@ -48,7 +46,6 @@ environment:
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.x" # currently 3.4.3
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.1"
       TOXENV: "py34"
       TOXPYTHON: "C:\\Python34-x64\\python.exe"
 
@@ -61,27 +58,36 @@ environment:
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.x" # currently 3.5.0
       PYTHON_ARCH: "64"
-      WINDOWS_SDK_VERSION: "v7.1"  # This may be wrong
       TOXENV: "py35"
       TOXPYTHON: "C:\\Python35-x64\\python.exe"
 
 
 init:
-  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+  - echo %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 install:
   - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
-  - "powershell .appveyor\\install.ps1"
+  - powershell .appveyor\\install.ps1
+  - pip install "virtualenv>=13.1.2" wheel tox codecov
 
 build: off
 
 test_script:
-  - "%WITH_COMPILER% %PYTHON%/Scripts/tox.exe -v"
+  - "%WITH_COMPILER% tox -v"
   - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
-  - "type C:\\projects\\astrodynamics\\.tox\\%TOXENV%\\log\\%TOXENV%-2.log"
 
 after_test:
-  - "%PYTHON%/Scripts/codecov.exe"
+  - type C:\\projects\\astrodynamics\\.tox\\%TOXENV%\\log\\%TOXENV%-*.log
+  - codecov --env APPVEYOR PYTHON_ARCH TOXENV
+  - "%WITH_COMPILER% python setup.py bdist_wheel"
+  - "%WITH_COMPILER% python setup.py bdist_wininst"
+  - "%WITH_COMPILER% python setup.py bdist_msi"
+  - ps: "ls dist"
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
 
 # Blacklist Travis branch used to test changes to config
 branches:
