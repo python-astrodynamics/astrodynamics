@@ -57,7 +57,7 @@ def test_platform_coverage():
         pass
 
     platforms = [
-        ('Darwin', (2,7), True),
+        ('Darwin', (2, 7), True),
         ('Darwin', (3, 3), True),
         ('Darwin', (3, 4), True),
         ('Darwin', (3, 5), True),
