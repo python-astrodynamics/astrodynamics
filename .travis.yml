@@ -3,6 +3,8 @@ language: python
 cache:
   directories:
     - $HOME/.cache/pip
+    # OS X cache not yet enabled: https://github.com/travis-ci/travis-ci/issues/4011
+    - $HOME/Library/Caches/pip
 matrix:
   include:
     - python: 2.7
@@ -56,6 +58,9 @@ script:
 
 after_success:
   - ./.travis/upload_coverage.sh
+
+after_script:
+  - cat .tox/$TOXENV/log/$TOXENV-*.log
 
 notifications:
   slack:
