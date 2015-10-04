@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import pytest
 
-import astrodynamics.ephemerides as ephemerides
+import astrodynamics.lowlevel.ephemerides as ephemerides
 
 
 class MockSegment(object):
@@ -49,6 +49,11 @@ def ephemeris():
     eph._kernel = MockKernel()
     eph.generate_paths()
     return eph
+
+
+def test_pair_failure(ephemeris):
+    with pytest.raises(ValueError):
+        ephemeris.rv(0, 5, 0)
 
 
 def test_ephemeris(ephemeris):
@@ -98,5 +103,8 @@ def test_ephemeris(ephemeris):
     assert np.all(r == -1.0)
     assert np.all(v == -1.0)
     r, v = ephemeris.rv(4, 301, 0)
+    assert np.all(r == 1.0)
+    assert np.all(v == 1.0)
+    r, v = ephemeris.rv(4, 301, 0, 0)
     assert np.all(r == 1.0)
     assert np.all(v == 1.0)

@@ -1,4 +1,10 @@
 # coding: utf-8
+"""The astrodynamics.ephemrides module
+
+This module contains a high-level wrapper around the 'jplephem'
+library by Brandon Rhodes.
+"""
+
 from __future__ import absolute_import, division, print_function
 
 import jplephem.spk as spk
@@ -31,8 +37,6 @@ class JPLEphemeris(object):
             factor = -1
         elif (origin, target) in self.kernel.pairs:
             factor = 1
-        else:
-            raise ValueError("Unknown pair({}, {}).".format(origin, target))
         segment = self.kernel[origin, target]
         r, v = segment.compute_and_differentiate(tdb, tdb2)
         return factor * r, factor * v
@@ -50,6 +54,8 @@ class JPLEphemeris(object):
         return r, v
 
     def rv(self, origin, target, tdb, tdb2=0.0):
+        if origin not in self.paths or target not in self.paths:
+            raise ValueError("Unknown pair({}, {}).".format(origin, target))
         path = self.paths[origin][target]
         r, v = self._compute_path(path, tdb, tdb2)
         return r, v
