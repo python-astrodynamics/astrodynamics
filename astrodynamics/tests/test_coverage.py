@@ -4,16 +4,30 @@ from __future__ import absolute_import, division, print_function
 import platform
 import sys
 
+from represent import ReprMixin
+
+
+class Machine(ReprMixin, object):
+    def __init__(self, os, python_version, x64):
+        self.os = os
+        self.python_version = python_version
+        self.x64 = x64
+
+        super(Machine, self).__init__()
+
+    def __eq__(self, other):
+        return (self.os == other.os and
+                self.python_version == other.python_version and
+                self.x64 == other.x64)
+
 
 def test_platform_coverage():
-    python_version = sys.version_info[:2]
-    os = platform.system()
-    is64bit = sys.maxsize > 2 ** 32
+    machine = Machine(os=platform.system(),
+                      python_version=sys.version_info[:2],
+                      x64=sys.maxsize > 2 ** 32)
 
-    machine = (os, python_version, is64bit)
-
-    assert os in ('Darwin', 'Linux', 'Windows')
-    assert python_version in [
+    assert machine.os in ('Darwin', 'Linux', 'Windows')
+    assert machine.python_version in [
         (2, 7),
         (3, 3),
         (3, 4),
@@ -23,56 +37,58 @@ def test_platform_coverage():
     # The charade below is so that in our unified coverage sourced from Travis
     # and AppVeyor, we can see that all the combinations of Python version, OS,
     # and 32/64 bits (Windows only) are tested.
-    if machine == ('Darwin', (2, 7), True):
+    if machine == Machine(os='Darwin', python_version=(2, 7), x64=True):
         pass
-    elif machine == ('Darwin', (3, 3), True):
+    elif machine == Machine(os='Darwin', python_version=(3, 3), x64=True):
         pass
-    elif machine == ('Darwin', (3, 4), True):
+    elif machine == Machine(os='Darwin', python_version=(3, 4), x64=True):
         pass
-    elif machine == ('Darwin', (3, 5), True):
+    elif machine == Machine(os='Darwin', python_version=(3, 5), x64=True):
         pass
-    elif machine == ('Linux', (2, 7), True):
+    elif machine == Machine(os='Linux', python_version=(2, 7), x64=True):
         pass
-    elif machine == ('Linux', (3, 3), True):
+    elif machine == Machine(os='Linux', python_version=(3, 3), x64=True):
         pass
-    elif machine == ('Linux', (3, 4), True):
+    elif machine == Machine(os='Linux', python_version=(3, 4), x64=True):
         pass
-    elif machine == ('Linux', (3, 5), True):
+    elif machine == Machine(os='Linux', python_version=(3, 5), x64=True):
         pass
-    elif machine == ('Windows', (2, 7), True):
+    elif machine == Machine(os='Windows', python_version=(2, 7), x64=True):
         pass
-    elif machine == ('Windows', (2, 7), False):
+    elif machine == Machine(os='Windows', python_version=(2, 7), x64=False):
         pass
-    elif machine == ('Windows', (3, 3), True):
+    elif machine == Machine(os='Windows', python_version=(3, 3), x64=True):
         pass
-    elif machine == ('Windows', (3, 3), False):
+    elif machine == Machine(os='Windows', python_version=(3, 3), x64=False):
         pass
-    elif machine == ('Windows', (3, 4), True):
+    elif machine == Machine(os='Windows', python_version=(3, 4), x64=True):
         pass
-    elif machine == ('Windows', (3, 4), False):
+    elif machine == Machine(os='Windows', python_version=(3, 4), x64=False):
         pass
-    elif machine == ('Windows', (3, 5), True):
+    elif machine == Machine(os='Windows', python_version=(3, 5), x64=True):
         pass
-    elif machine == ('Windows', (3, 5), False):
+    elif machine == Machine(os='Windows', python_version=(3, 5), x64=False):
         pass
 
     platforms = [
-        ('Darwin', (2, 7), True),
-        ('Darwin', (3, 3), True),
-        ('Darwin', (3, 4), True),
-        ('Darwin', (3, 5), True),
-        ('Linux', (2, 7), True),
-        ('Linux', (3, 3), True),
-        ('Linux', (3, 4), True),
-        ('Linux', (3, 5), True),
-        ('Windows', (2, 7), True),
-        ('Windows', (2, 7), False),
-        ('Windows', (3, 3), True),
-        ('Windows', (3, 3), False),
-        ('Windows', (3, 4), True),
-        ('Windows', (3, 4), False),
-        ('Windows', (3, 5), True),
-        ('Windows', (3, 5), False),
+        Machine(os='Darwin', python_version=(2, 7), x64=True),
+        Machine(os='Darwin', python_version=(3, 3), x64=True),
+        Machine(os='Darwin', python_version=(3, 4), x64=True),
+        Machine(os='Darwin', python_version=(3, 5), x64=True),
+        Machine(os='Linux', python_version=(2, 7), x64=True),
+        Machine(os='Linux', python_version=(3, 3), x64=True),
+        Machine(os='Linux', python_version=(3, 4), x64=True),
+        Machine(os='Linux', python_version=(3, 5), x64=True),
+        Machine(os='Windows', python_version=(2, 7), x64=True),
+        Machine(os='Windows', python_version=(2, 7), x64=False),
+        Machine(os='Windows', python_version=(3, 3), x64=True),
+        Machine(os='Windows', python_version=(3, 3), x64=False),
+        Machine(os='Windows', python_version=(3, 4), x64=True),
+        Machine(os='Windows', python_version=(3, 4), x64=False),
+        Machine(os='Windows', python_version=(3, 5), x64=True),
+        Machine(os='Windows', python_version=(3, 5), x64=False),
     ]
+
+    print('\n> {}'.format(machine))
 
     assert machine in platforms
