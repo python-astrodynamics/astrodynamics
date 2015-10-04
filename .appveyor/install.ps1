@@ -82,6 +82,7 @@ function main () {
     InstallPackage $env:PYTHON virtualenv>=13.1.2
     InstallPackage $env:PYTHON wheel
     InstallPackage $env:PYTHON tox
+    InstallPackage $env:PYTHON codecov
 }
 
 main

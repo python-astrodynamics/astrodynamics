@@ -2,7 +2,6 @@ cache:
   - C:\Users\appveyor\AppData\Local\pip\Cache\wheels
 
 environment:
-
   global:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
@@ -10,7 +9,6 @@ environment:
     WITH_COMPILER: "cmd /E:ON /V:ON /C .\\.appveyor\\run_with_compiler.cmd"
 
   matrix:
-
     # Pre-installed Python versions, which Appveyor may upgrade to
     # a later point release.
     # See: http://www.appveyor.com/docs/installed-software#python
@@ -81,3 +79,11 @@ test_script:
   - "%WITH_COMPILER% %PYTHON%/Scripts/tox.exe -v"
   - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
   - "type C:\\projects\\astrodynamics\\.tox\\%TOXENV%\\log\\%TOXENV%-2.log"
+
+after_test:
+  - "%PYTHON%/Scripts/codecov.exe"
+
+# Blacklist Travis branch used to test changes to config
+branches:
+  except:
+    - travis
