@@ -20,6 +20,9 @@ def test_platform_coverage():
         (3, 5),
     ]
 
+    # The charade below is so that in our unified coverage sourced from Travis
+    # and AppVeyor, we can see that all the combinations of Python version, OS,
+    # and 32/64 bits (Windows only) are tested.
     if machine == ('Darwin', (2, 7), True):
         pass
     elif machine == ('Darwin', (3, 3), True):
@@ -52,3 +55,23 @@ def test_platform_coverage():
         pass
     elif machine == ('Windows', (3, 5), False):
         pass
+
+    platforms = [
+        ('Darwin', (3, 3), True),
+        ('Darwin', (3, 4), True),
+        ('Darwin', (3, 5), True),
+        ('Linux', (2, 7), True),
+        ('Linux', (3, 3), True),
+        ('Linux', (3, 4), True),
+        ('Linux', (3, 5), True),
+        ('Windows', (2, 7), True),
+        ('Windows', (2, 7), False),
+        ('Windows', (3, 3), True),
+        ('Windows', (3, 3), False),
+        ('Windows', (3, 4), True),
+        ('Windows', (3, 4), False),
+        ('Windows', (3, 5), True),
+        ('Windows', (3, 5), False),
+    ]
+
+    assert machine in platforms
