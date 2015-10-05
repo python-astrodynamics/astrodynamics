@@ -24,11 +24,13 @@ from six.moves.urllib.parse import quote
 from .progress import DownloadProgressBar, DownloadProgressSpinner
 from .util import format_size
 
-SPK_URL = "http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/{category}{old}/{kernel}.bsp"
+SPK_URL = ("http://naif.jpl.nasa.gov/pub/naif/generic_kernels/"
+           "spk/{category}{old}/{kernel}.bsp")
 OLD_DIR = '/a_old_versions'
 
 appdirs = AppDirs('astrodynamics')
 spk_dir = Path(appdirs.user_data_dir, 'spk')
+
 
 def main():
     args = docopt(__doc__.format(default=spk_dir))
@@ -47,8 +49,6 @@ def main():
         urls = [
             SPK_URL.format(category=category, old='', kernel=quote(kernel)),
             SPK_URL.format(category=category, old=OLD_DIR, kernel=quote(kernel))
-            # SPK_URL.format(category=category, old='', kernel=quote(kernel + '_part-1'))
-            # SPK_URL.format(category=category, old=OLD_DIR, kernel=quote(kernel + '_part-1'))
         ]
 
         # Get last path component for filename.

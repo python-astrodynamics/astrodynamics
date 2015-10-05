@@ -85,7 +85,7 @@ def qisclose(a, b, rel_tol=1e-9, abs_tol=0.0):
 
 
 def format_size(value, binary=False, gnu=False, format='%.1f'):
-    """Format a number of byteslike a human readable filesize (eg. 10 kB).  By
+    """Format a number of bytes like a human readable file size (e.g. 10 kB). By
     default, decimal suffixes (kB, MB) are used.  Passing binary=true will use
     binary suffixes (KiB, MiB) are used and the base will be 2**10 instead of
     10**3.  If ``gnu`` is True, the binary argument is ignored and GNU-style
