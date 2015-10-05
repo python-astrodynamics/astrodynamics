@@ -1,7 +1,7 @@
 # coding: utf-8
-"""The astrodynamics.ephemrides module
+"""The astrodynamics.lowlevel.ephemerides module
 
-This module contains a high-level wrapper around the 'jplephem'
+This module contains a wrapper around the 'jplephem'
 library by Brandon Rhodes.
 """
 
