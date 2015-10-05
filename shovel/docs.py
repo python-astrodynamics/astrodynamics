@@ -23,7 +23,7 @@ def watch():
 
     handler = ShellCommandTrick(
         shell_command='sphinx-build -b html docs docs/_build/html',
-        patterns=['*.rst', '*.py'],
+        patterns=['*.rst', '*.py', '*.css'],
         ignore_patterns=['_build/*'],
         ignore_directories=['.tox'],
         drop_during_process=True)

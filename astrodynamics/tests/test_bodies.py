@@ -45,20 +45,22 @@ def test_reference_ellipsoid_repr():
 
 def test_celestial_body():
     "Test CelestialBody initialiser and verify computed attributes"
-    a = CelestialBody(name='earth', ellipsoid=wgs84, mu=wgs84.mu)
-    b = CelestialBody.from_reference_ellipsoid(name='earth', ellipsoid=wgs84)
+    a = CelestialBody(name='earth', ellipsoid=wgs84, mu=wgs84.mu, naif_id=399)
+    b = CelestialBody.from_reference_ellipsoid(name='earth', ellipsoid=wgs84,
+                                               naif_id=399)
     assert a.mu == b.mu == wgs84.mu
 
     ellipsoid = Ellipsoid(a=1 * u.m, b=1 * u.m)
     c = CelestialBody(name='earth', ellipsoid=ellipsoid,
-                      mu=GEOCENTRIC_GRAVITATIONAL_CONSTANT)
+                      mu=GEOCENTRIC_GRAVITATIONAL_CONSTANT, naif_id=399)
     assert qisclose(c.mass, EARTH_MASS)
 
 
 def test_celestial_body_repr():
     ellipsoid = Ellipsoid(a=1 * u.m, b=1 * u.m)
-    d = CelestialBody(name='d', ellipsoid=ellipsoid, mu=1 * u.m ** 3 / u.s ** 2)
+    d = CelestialBody(name='d', ellipsoid=ellipsoid, mu=1 * u.m ** 3 / u.s ** 2,
+                      naif_id=1)
 
     s = ("CelestialBody(name='d', ellipsoid=Ellipsoid(a=<Quantity 1.0 m>, "
-         "f=<Quantity 0.0>), mu=<Quantity 1.0 m3 / s2>)")
+         "f=<Quantity 0.0>), mu=<Quantity 1.0 m3 / s2>, naif_id=1)")
     assert repr(d) == s
