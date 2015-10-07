@@ -13,7 +13,7 @@ from ..constants import (
     SATURN_RADIUS_EQUATORIAL, SATURN_RADIUS_POLAR, URANUS_MASS,
     URANUS_RADIUS_EQUATORIAL, URANUS_RADIUS_POLAR, VENUS_MASS,
     VENUS_RADIUS_EQUATORIAL, VENUS_RADIUS_POLAR)
-from ..util import read_only_property, verify_unit
+from ..utils import read_only_property, verify_unit
 from .ellipsoid import Ellipsoid, wgs84
 
 __all__ = (

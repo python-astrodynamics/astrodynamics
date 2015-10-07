@@ -1,9 +1,13 @@
 [run]
-branch = True
-source =
+branch=True
+source=
     astrodynamics
 
 [paths]
-source =
+source=
     astrodynamics
     .tox/*/lib/python*/site-packages/astrodynamics
+
+[report]
+exclude_lines=
+	if __name__ == '__main__':

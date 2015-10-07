@@ -3,6 +3,11 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+try:
+    from math import isclose
+except ImportError:
+    isclose = None
+
 
 def _isclose(a, b, rel_tol=1e-9, abs_tol=0.0):
     """
@@ -68,7 +73,4 @@ def _isclose(a, b, rel_tol=1e-9, abs_tol=0.0):
              (diff <= abs(rel_tol * a))) or
             (diff <= abs_tol))
 
-try:
-    from math import isclose
-except ImportError:
-    isclose = _isclose
+isclose = isclose or _isclose

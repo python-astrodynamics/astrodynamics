@@ -6,7 +6,7 @@ from astropy.units import Quantity, Unit
 from astropy.utils import lazyproperty
 from represent import ReprHelperMixin
 
-from ..util import read_only_property
+from ..utils import read_only_property
 
 
 class Constant(ReprHelperMixin, Quantity):

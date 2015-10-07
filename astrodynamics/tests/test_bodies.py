@@ -9,7 +9,7 @@ from astrodynamics.bodies import (
 from astrodynamics.constants import (
     EARTH_MASS, GEOCENTRIC_GRAVITATIONAL_CONSTANT, WGS84_EQUATORIAL_RADIUS,
     WGS84_FLATTENING)
-from astrodynamics.util import qisclose
+from astrodynamics.utils import qisclose
 
 
 def test_ellipsoid():

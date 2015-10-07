@@ -7,7 +7,7 @@ from represent import ReprHelperMixin
 from ..constants import (
     WGS84_ANGULAR_VELOCITY, WGS84_EQUATORIAL_RADIUS, WGS84_FLATTENING,
     WGS84_MU)
-from ..util import read_only_property, verify_unit
+from ..utils import read_only_property, verify_unit
 
 __all__ = (
     'Ellipsoid',

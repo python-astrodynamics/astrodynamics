@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division, print_function
 
 import itertools
-import os
 import sys
 from signal import SIGINT, default_int_handler, signal
 
@@ -11,7 +10,8 @@ from progress.bar import Bar, IncrementalBar
 from progress.helpers import WritelnMixin
 from progress.spinner import Spinner
 
-from .util import format_size
+from .compat import WINDOWS
+from .helper import format_size
 
 try:
     import colorama
@@ -20,9 +20,7 @@ try:
 except Exception:
     colorama = None
 
-# windows detection, covers cpython and ironpython
-WINDOWS = (sys.platform.startswith("win") or
-           (sys.platform == 'cli' and os.name == 'nt'))
+__all__ = ('DownloadProgressBar', 'DownloadProgressSpinner')
 
 
 def _select_progress_class(preferred, fallback):
