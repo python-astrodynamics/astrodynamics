@@ -4,7 +4,10 @@ from __future__ import absolute_import, division, print_function
 import subprocess
 from collections import OrderedDict
 
+from plumbum import local, FG
 from shovel import task
+
+pytest = local['py.test']
 
 
 @task
@@ -23,3 +26,8 @@ def quick():
     print('\nSummary:')
     for k, v in failed.items():
         print('{:8s}: {}'.format(k, 'Fail' if v else 'Pass'))
+
+
+@task
+def coverage():
+    pytest['--cov=astrodynamics', '--cov-report=html', '--cov-config=.coveragerc'] & FG
