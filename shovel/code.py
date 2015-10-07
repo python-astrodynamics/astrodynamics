@@ -34,4 +34,5 @@ def format_imports():
             continue
         SortImports(str(pyfile),
                     multi_line_output=HANGING_GRID,
-                    skip=['__init__.py'])
+                    skip=['__init__.py'],
+                    known_third_party=['six'])
