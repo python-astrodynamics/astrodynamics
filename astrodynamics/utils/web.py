@@ -22,18 +22,27 @@ SPK_DIR = Path(appdirs.user_data_dir, 'spk')
 
 
 class SPKDownloadError(Exception):
-    pass
+    """Raised when SPK download fails."""
 
 
 class KernelNotFoundError(SPKDownloadError):
-    pass
+    """Raised when SPK kernel not found on website."""
 
 
 class InvalidCategoryError(SPKDownloadError):
-    pass
+    """Raised for invalid category."""
 
 
 def download_spk(category, kernel, download_dir=None):
+    """Download generic kernel spk files from
+    http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/
+
+    Parameters:
+        category: asteroids, comets, lagrange_point, planets, satellites, or stations
+        kernel: Kernel name, e.g. `de430` will download `de430.bsp`
+        download_dir: Directory to download file to. By default, this is to a
+                      platform-dependent astrodynamics directory: :py:const:`SPK_DIR`
+    """
     valid_categories = ['asteroids', 'comets', 'lagrange_point', 'planets',
                         'satellites', 'stations']
 
@@ -80,6 +89,12 @@ def download_spk(category, kernel, download_dir=None):
 
 
 def download_file_with_progress(url, filepath):
+    """Download url to file with progress bar or spinner printed to stderr.
+
+    Parameters:
+        url (str): URL to download.
+        filepath (str): File path URL will be saved to.
+    """
     resp = requests.get(url, stream=True)
     resp.raise_for_status()
 

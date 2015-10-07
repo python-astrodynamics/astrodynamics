@@ -7,3 +7,4 @@ Utilities
 
    compat
    helper
+   web
