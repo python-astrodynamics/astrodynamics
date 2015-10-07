@@ -34,7 +34,7 @@ class InvalidCategoryError(SPKDownloadError):
 
 
 def download_spk(category, kernel, download_dir=None):
-    """Download generic kernel spk files from
+    """Download generic kernel SPK files from
     http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/
 
     Parameters:
@@ -89,7 +89,7 @@ def download_spk(category, kernel, download_dir=None):
 
 
 def download_file_with_progress(url, filepath):
-    """Download url to file with progress bar or spinner printed to stderr.
+    """Download URL to file with progress bar or spinner printed to stderr.
 
     Parameters:
         url (str): URL to download.
