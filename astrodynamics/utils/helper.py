@@ -1,15 +1,22 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
+import errno
+from contextlib import contextmanager
+
 from astropy import units as u
 from astropy.units import Unit, UnitBase
 
-from .compat.math import isclose
+from ..compat.contextlib import suppress
+from ..compat.math import isclose
+from .compat import PY33
 
 __all__ = (
     'format_size',
+    'prefix',
     'qisclose',
     'read_only_property',
+    'suppress_file_exists_error',
     'verify_unit',
 )
 
@@ -120,3 +127,23 @@ def format_size(value, binary=False, gnu=False, format='%.1f'):
     if gnu:
         return (format + '%s') % ((base * bytes / unit), s)
     return (format + ' %s') % ((base * bytes / unit), s)
+
+
+@contextmanager
+def suppress_file_exists_error():
+    """Compatibility function for catching FileExistsError on Python 2"""
+    if PY33:
+        with suppress(FileExistsError):  # noqa
+            yield
+    else:
+        try:
+            yield
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+
+
+def prefix(prefix, iterable):
+    """Prepend items from `iterable` with `prefix` string."""
+    for x in iterable:
+        yield '{prefix}{x}'.format(prefix=prefix, x=x)

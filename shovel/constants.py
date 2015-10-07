@@ -19,11 +19,11 @@ constant_re = re.compile('^(?P<name>[A-Z0-9_]+) = (?P<value>.+)')
 TEMPLATE = """# coding: utf-8
 from __future__ import absolute_import, division, print_function
 
-from astropy import units as u  # flake8: noqa
+from astropy import units as u  # noqa
 
 # Absolute import used here so file can be exec'd
 # standalone by documentation helper script.
-from astrodynamics.constants import Constant  # flake8: noqa
+from astrodynamics.constants import Constant  # noqa
 
 __all__ = (
 {all_string}
@@ -68,7 +68,7 @@ References
 {details_table}
 
 .. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY_LICENSE.txt
-"""
+"""  # noqa
 
 
 def get_constants_from_data():
