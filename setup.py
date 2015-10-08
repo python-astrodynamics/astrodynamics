@@ -48,6 +48,7 @@ extras_require = {
         'shovel',
         'sphinx',
         'sphinx_rtd_theme',
+        'tabulate',
         'tox',
         'twine',
         'watchdog',
