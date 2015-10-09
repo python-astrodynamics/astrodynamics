@@ -108,6 +108,7 @@ class InterruptibleMixin(object):
 
 
 class DownloadProgressMixin(object):
+    sma_window = 100
 
     def __init__(self, *args, **kwargs):
         super(DownloadProgressMixin, self).__init__(*args, **kwargs)
