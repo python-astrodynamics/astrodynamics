@@ -30,7 +30,7 @@ extras_require = {
         'flake8-future-import',
         'isort',
         'pep8-naming',
-        'plumbum',
+        'plumbum>=1.6.0',
         'pytest>=2.7.3',
         'shovel',
         'sphinx',
