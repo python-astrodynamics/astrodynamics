@@ -110,7 +110,7 @@ def mock_spk_url(request):
 
 @pytest.mark.usefixtures('mock_spk_url')
 class TestDownloadSPK:
-    def test_blah(self, tmpdir, capsys, mock_spk_url):
+    def test_download(self, tmpdir, capsys, mock_spk_url):
         rsps = mock_spk_url
         # Mock progress file attribute to prevent output to stderr (I had
         # trouble capturing)
