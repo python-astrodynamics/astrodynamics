@@ -18,7 +18,7 @@ AUTHOR = metadata['author']
 EMAIL = metadata['email']
 
 requires = [
-    'astropy',
+    'astropy>=1.0.5',
     'jplephem>=2.0',
     'networkx',
     'numpy',

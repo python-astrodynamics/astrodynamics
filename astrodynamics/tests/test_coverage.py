@@ -38,89 +38,88 @@ def test_platform_coverage():
     # and AppVeyor, we can see that all the combinations of Python version, OS,
     # and 32/64 bits (Windows only) are tested.
 
+    matches = 0
+
     testmachine = Machine(os='Darwin', python_version=(2, 7), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Darwin', python_version=(3, 3), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Darwin', python_version=(3, 4), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Darwin', python_version=(3, 5), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Linux', python_version=(2, 7), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Linux', python_version=(3, 3), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Linux', python_version=(3, 4), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Linux', python_version=(3, 5), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(2, 7), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(2, 7), x64=False)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 3), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 3), x64=False)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 4), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 4), x64=False)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 5), x64=True)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
     testmachine = Machine(os='Windows', python_version=(3, 5), x64=False)
     if machine == testmachine:
         print('\n> Machine matched {}'.format(testmachine))
+        matches += 1
 
-    platforms = [
-        Machine(os='Darwin', python_version=(2, 7), x64=True),
-        Machine(os='Darwin', python_version=(3, 3), x64=True),
-        Machine(os='Darwin', python_version=(3, 4), x64=True),
-        Machine(os='Darwin', python_version=(3, 5), x64=True),
-        Machine(os='Linux', python_version=(2, 7), x64=True),
-        Machine(os='Linux', python_version=(3, 3), x64=True),
-        Machine(os='Linux', python_version=(3, 4), x64=True),
-        Machine(os='Linux', python_version=(3, 5), x64=True),
-        Machine(os='Windows', python_version=(2, 7), x64=True),
-        Machine(os='Windows', python_version=(2, 7), x64=False),
-        Machine(os='Windows', python_version=(3, 3), x64=True),
-        Machine(os='Windows', python_version=(3, 3), x64=False),
-        Machine(os='Windows', python_version=(3, 4), x64=True),
-        Machine(os='Windows', python_version=(3, 4), x64=False),
-        Machine(os='Windows', python_version=(3, 5), x64=True),
-        Machine(os='Windows', python_version=(3, 5), x64=False),
-    ]
+    assert matches == 1, 'No match for {}'.format(machine)
 
     print('\n> {}'.format(machine))
-
-    assert machine in platforms
