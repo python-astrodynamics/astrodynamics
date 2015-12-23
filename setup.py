@@ -4,7 +4,8 @@ from __future__ import absolute_import, division, print_function
 import re
 import sys
 
-from setuptools import setup, Command, find_packages
+from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand  # noqa
 
 
 INIT_FILE = 'astrodynamics/__init__.py'
@@ -18,7 +19,7 @@ DESCRIPTION = metadata['description']
 AUTHOR = metadata['author']
 EMAIL = metadata['email']
 
-requires = [
+requires = {
     'appdirs',
     'astropy>=1.0.5',
     'colorama',
@@ -30,50 +31,61 @@ requires = [
     'represent>=1.4.0',
     'requests',
     'six',
-]
-
-if sys.version_info[:2] < (3, 4):
-    requires.append('pathlib')
-
-extras_require = {
-    'dev': [
-        'flake8',
-        'flake8-coding',
-        'flake8-future-import',
-        'isort',
-        'pep8-naming',
-        'plumbum>=1.6.0',
-        'pytest>=2.7.3',
-        'responses',
-        'shovel',
-        'sphinx',
-        'sphinx_rtd_theme',
-        'tabulate',
-        'tox',
-        'twine',
-        'watchdog',
-    ],
 }
 
+if sys.version_info[:2] < (3, 4):
+    requires |= {'pathlib'}
+
+extras_require = dict()
+
+extras_require['test'] = {
+    'pytest>=2.7.3',
+    'responses',
+}
+
+extras_require['dev'] = {
+    'doc8',
+    'flake8',
+    'flake8-coding',
+    'flake8-future-import',
+    'isort',
+    'pep8-naming',
+    'plumbum>=1.6.0',
+    'pyenchant',
+    'shovel',
+    'sphinx',
+    'sphinx_rtd_theme',
+    'sphinxcontrib-spelling',
+    'tabulate',
+    'tox',
+    'twine',
+    'watchdog',
+}
+
+extras_require['dev'] |= extras_require['test']
+
 if sys.version_info[:2] < (3, 3):
-    extras_require['dev'].append('mock')
+    extras_require['dev'] |= {'mock'}
 
 
-class PyTest(Command):
-    """Allow 'python setup.py test' to run without first installing pytest"""
-    user_options = []
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
 
     def initialize_options(self):
-        pass
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
 
     def finalize_options(self):
-        pass
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
 
-    def run(self):
-        import subprocess
-        import sys
-        errno = subprocess.call([sys.executable, 'runtests.py'])
-        raise SystemExit(errno)
+    def run_tests(self):
+        # import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
+
 
 setup(
     name='astrodynamics',
@@ -93,4 +105,5 @@ setup(
     ],
     license=LICENSE,
     install_requires=requires,
-    extras_require=extras_require)
+    extras_require=extras_require,
+    tests_require=extras_require['test'])
