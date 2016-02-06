@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 
 import re
 import sys
+from collections import defaultdict
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand  # noqa
@@ -33,15 +34,29 @@ requires = {
     'six',
 }
 
-if sys.version_info[:2] < (3, 4):
-    requires |= {'pathlib'}
 
-extras_require = dict()
+def add_to_extras(extras_require, dest, source):
+    """Add dependencies from `source` extra to `dest` extra, handling
+    conditional dependencies.
+    """
+    for key, deps in list(extras_require.items()):
+        extra, _, condition = key.partition(':')
+        if extra == source:
+            if condition:
+                extras_require[dest + ':' + condition] |= deps
+            else:
+                extras_require[dest] |= deps
+
+extras_require = defaultdict(set)
+
+extras_require[':python_version<"3.4"'] = {'pathlib'}
 
 extras_require['test'] = {
     'pytest>=2.7.3',
     'responses',
 }
+
+extras_require['test:python_version<"3.3"'] = {'mock'}
 
 extras_require['dev'] = {
     'doc8',
@@ -52,6 +67,7 @@ extras_require['dev'] = {
     'pep8-naming',
     'plumbum>=1.6.0',
     'pyenchant',
+    'pytest-cov',
     'shovel',
     'sphinx',
     'sphinx_rtd_theme',
@@ -62,10 +78,9 @@ extras_require['dev'] = {
     'watchdog',
 }
 
-extras_require['dev'] |= extras_require['test']
+add_to_extras(extras_require, 'dev', 'test')
 
-if sys.version_info[:2] < (3, 3):
-    extras_require['dev'] |= {'mock'}
+extras_require = dict(extras_require)
 
 
 class PyTest(TestCommand):
