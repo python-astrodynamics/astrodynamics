@@ -1,0 +1,4 @@
+include .coveragerc
+include CHANGELOG.md
+include tox.ini
+recursive-include licenses *.txt
