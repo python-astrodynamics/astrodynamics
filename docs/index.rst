@@ -12,6 +12,7 @@ Contents:
    module
    development/index
    changelog
+   glossary
 
 Indices and tables
 ==================
