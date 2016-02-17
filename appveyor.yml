@@ -69,7 +69,7 @@ init:
 install:
   - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
   - powershell .appveyor\\install.ps1
-  - pip install "virtualenv>=13.1.2" wheel tox codecov
+  - pip install -U codecov tox setuptools virtualenv wheel
 
 build: off
 
