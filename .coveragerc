@@ -2,11 +2,13 @@
 branch=True
 source=
     astrodynamics
+    tests/
 
 [paths]
 source=
-    astrodynamics
+    src/astrodynamics
     .tox/*/lib/python*/site-packages/astrodynamics
+    C:\projects\venv\Lib\site-packages\astrodynamics
 
 [report]
 exclude_lines=

@@ -7,6 +7,8 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     BUILD: "cmd /E:ON /V:ON /C .\\.appveyor\\build.cmd"
+    NUMPY_URL:
+      secure: drCgBIMN3vdVjPRXNyiBAHa4g9VeRmnylFuhd7aUUA7XYhA8FfyJ5bHdXtzkFhgT6GzUSXqp19RcXW6DOX9eow==
 
   matrix:
     # Pre-installed Python versions, which Appveyor may upgrade to
@@ -14,54 +16,43 @@ environment:
     # See: http://www.appveyor.com/docs/installed-software#python
 
     - PYTHON: "C:\\Python27"
-      TOXENV: "py27"
-      TOXPYTHON: "C:\\Python27\\python.exe"
 
     - PYTHON: "C:\\Python27-x64"
-      TOXENV: "py27"
-      TOXPYTHON: "C:\\Python27-x64\\python.exe"
 
     - PYTHON: "C:\\Python33"
-      TOXENV: "py33"
-      TOXPYTHON: "C:\\Python33\\python.exe"
 
     - PYTHON: "C:\\Python33-x64"
       DISTUTILS_USE_SDK: "1"
-      TOXENV: "py33"
-      TOXPYTHON: "C:\\Python33-x64\\python.exe"
 
     - PYTHON: "C:\\Python34"
-      TOXENV: "py34"
-      TOXPYTHON: "C:\\Python34\\python.exe"
 
     - PYTHON: "C:\\Python34-x64"
       DISTUTILS_USE_SDK: "1"
-      TOXENV: "py34"
-      TOXPYTHON: "C:\\Python34-x64\\python.exe"
 
     - PYTHON: "C:\\Python35"
-      TOXENV: "py35"
-      TOXPYTHON: "C:\\Python35\\python.exe"
 
     - PYTHON: "C:\\Python35-x64"
-      TOXENV: "py35"
-      TOXPYTHON: "C:\\Python35-x64\\python.exe"
-
 
 init:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 install:
-  - pip install -U codecov tox setuptools virtualenv wheel
+  - pip install -U virtualenv
+  - python -m virtualenv C:\projects\venv
+  - C:\projects\venv\Scripts\activate.bat
+  - pip install -U codecov coverage setuptools six wheel
+  - "%BUILD% python .appveyor\\install_numpy.py"
+  - "%BUILD% pip install .[test]"
 
 build: off
 
 test_script:
-  - "%BUILD% tox -v"
+  - coverage run --parallel-mode -m pytest
+  - coverage combine
+  - coverage report -m
 
 after_test:
-  - type C:\\projects\\astrodynamics\\.tox\\%TOXENV%\\log\\%TOXENV%-*.log
-  - codecov --env APPVEYOR PYTHON TOXENV
+  - codecov --env APPVEYOR PYTHON
   - "%BUILD% python setup.py bdist_wheel"
 
 artifacts:
