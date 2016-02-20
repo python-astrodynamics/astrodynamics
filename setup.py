@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand  # noqa
 
 
-INIT_FILE = 'astrodynamics/__init__.py'
+INIT_FILE = 'src/astrodynamics/__init__.py'
 init_data = open(INIT_FILE).read()
 
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_data))
@@ -110,7 +110,8 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     url='https://github.com/python-astrodynamics/astrodynamics',
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages(where='src'),
     cmdclass={'test': PyTest},
     classifiers=[
         'Development Status :: 1 - Planning',
