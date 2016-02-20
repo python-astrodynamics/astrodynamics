@@ -2,3 +2,4 @@ include .coveragerc
 include CHANGELOG.md
 include tox.ini
 recursive-include licenses *.txt
+recursive-include tests *.py
