@@ -8,7 +8,6 @@ from appdirs import AppDirs
 from requests import HTTPError
 from six.moves.urllib.parse import quote
 
-from ..compat.contextlib import suppress
 from .helper import format_size, prefix, suppress_file_exists_error
 from .progress import DownloadProgressBar, DownloadProgressSpinner
 
