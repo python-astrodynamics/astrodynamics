@@ -77,8 +77,12 @@ def download_spk(category, kernel, download_dir=None):
     downloaded = False
 
     for url in urls:
-        with suppress(HTTPError):
+        try:
             download_file_with_progress(url, str(filepath))
+        except HTTPError as exc:
+            if exc.response.status_code != 404:
+                raise
+        else:
             print('Kernel downloaded to', filepath)
             downloaded = True
             break

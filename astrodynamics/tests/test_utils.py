@@ -6,6 +6,7 @@ import io
 from pathlib import Path
 
 import pytest
+import requests
 import responses
 from astropy import units as u
 from responses import GET
@@ -140,6 +141,19 @@ class TestDownloadSPK:
 
                 assert lines[1].endswith(data['kernel'] + '.bsp')
                 capsys.readouterr()
+
+    def test_download_failed(self, tmpdir):
+        with responses.RequestsMock(assert_all_requests_are_fired=False) as rsps:
+            rsps.add(
+                GET, SPK_URL.format(category='planets', kernel='jakku'),
+                status=500)
+            rsps.add(
+                GET, SPK_OLD_URL.format(category='planets', kernel='jakku'),
+                status=500)
+
+            with pytest.raises(requests.HTTPError):
+                download_spk(category='planets', kernel='jakku',
+                             download_dir=str(tmpdir))
 
     def test_kernel_with_extension(self, tmpdir, capsys):
         """Test that kernel can still be downloaded if it has its extension."""
