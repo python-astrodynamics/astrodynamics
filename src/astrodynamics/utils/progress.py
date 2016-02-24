@@ -113,7 +113,6 @@ class DownloadProgressMixin(object):
     def __init__(self, *args, **kwargs):
         super(DownloadProgressMixin, self).__init__(*args, **kwargs)
         self.message = (" " * (0 + 2)) + self.message
-        # self.message = (" " * (get_indentation() + 2)) + self.message
 
     @property
     def downloaded(self):

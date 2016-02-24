@@ -114,5 +114,5 @@ def download_file_with_progress(url, filepath):
         progress_indicator = DownloadProgressSpinner().iter
 
     with open(filepath, 'wb') as f:
-        for chunk in progress_indicator(resp.iter_content(4096), 4096):
+        for chunk in progress_indicator(resp.iter_content(10240), 10240):
             f.write(chunk)
