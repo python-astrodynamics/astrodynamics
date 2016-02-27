@@ -14,7 +14,8 @@ Predefined Reference Ellipsoids
 
 .. data:: wgs84
 
-   A :py:class:`ReferenceEllipsoid` instantiated with parameters from :py:mod:`astsrodynamics.constants.wgs84`
+   A :py:class:`ReferenceEllipsoid` instantiated with the ``WGS84_*`` constants
+   from :py:mod:`astrodynamics.constants`.
 
 Inheritance diagram
 ===================

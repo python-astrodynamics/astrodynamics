@@ -2,6 +2,8 @@
 Constants
 *********
 
+.. py:module:: astrodynamics.constants
+
 .. currentmodule:: astrodynamics.constants
 
 .. autoclass:: Constant

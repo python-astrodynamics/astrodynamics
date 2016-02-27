@@ -55,6 +55,8 @@ if spelling is not None:
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+nitpicky = True
+
 # The suffix of source filenames.
 source_suffix = '.rst'
 
@@ -301,6 +303,7 @@ intersphinx_mapping = {
     'python': ('http://docs.python.org/3', None),
     'ipython': ('http://ipython.org/ipython-doc/stable', None),
     'astropy': ('http://docs.astropy.org/en/stable/', None),
+    'represent': ('http://pythonhosted.org/Represent', None),
 }
 
 autodoc_member_order = 'bysource'
