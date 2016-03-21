@@ -50,7 +50,7 @@ def add_to_extras(extras_require, dest, source):
 
 extras_require = defaultdict(set)
 
-extras_require[':python_version<"3.4"'] = {'pathlib'}
+extras_require[':python_version<"3.4"'] = {'enum34', 'pathlib'}
 
 extras_require['test'] = {
     'pytest>=2.7.3',
