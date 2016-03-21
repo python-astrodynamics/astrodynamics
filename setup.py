@@ -57,6 +57,7 @@ extras_require['test'] = {
 }
 
 extras_require['test:python_version<"3.3"'] = {'mock'}
+extras_require['test:python_version<"3.4"'] = {'singledispatch'}
 
 extras_require['dev'] = {
     'doc8',
