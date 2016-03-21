@@ -31,6 +31,7 @@ requires = {
     'progress',
     'represent>=1.4.0',
     'requests',
+    'scipy',
     'six',
 }
 
