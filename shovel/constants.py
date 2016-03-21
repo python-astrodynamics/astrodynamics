@@ -67,7 +67,7 @@ References
 
 {details_table}
 
-.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY_LICENSE.txt
+.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY.txt
 """  # noqa
 
 

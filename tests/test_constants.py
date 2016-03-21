@@ -1,6 +1,6 @@
 # coding: utf-8
 # These tests are taken from astropy, as with the astrodynamics.constant.Constant
-# class. It retains the original license (see licenses/ASTROPY_LICENSE.txt)
+# class. It retains the original license (see licenses/ASTROPY.txt)
 from __future__ import absolute_import, division, print_function
 
 import copy

@@ -136,4 +136,4 @@ WGS84_MU                           WGS84 geocentric gravitational constant      
 WGS84_ANGULAR_VELOCITY             WGS84 nominal earth mean angular velocity        World Geodetic System 1984
 =================================  ===============================================  ===============================================================
 
-.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY_LICENSE.txt
+.. _`license`: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/licenses/ASTROPY.txt

@@ -1,7 +1,7 @@
 # coding: utf-8
 # This file is dual licensed under the terms of the Apache License, Version
-# 2.0, and the BSD License. See the LICENSE file in the root of this repository
-# for complete details.
+# 2.0, and the BSD License. See the licenses/CRYPTOGRAPHY.txt file in this
+# repository for complete details.
 #
 # This file is adapted from cryptography-docs.py by the The Cryptography
 # Developers.
