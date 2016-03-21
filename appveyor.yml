@@ -7,7 +7,7 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     BUILD: "cmd /E:ON /V:ON /C .\\.appveyor\\build.cmd"
-    NUMPY_URL:
+    WHEEL_URL:
       secure: drCgBIMN3vdVjPRXNyiBAHa4g9VeRmnylFuhd7aUUA7XYhA8FfyJ5bHdXtzkFhgT6GzUSXqp19RcXW6DOX9eow==
 
   matrix:
@@ -41,7 +41,7 @@ install:
   - python -m virtualenv C:\projects\venv
   - C:\projects\venv\Scripts\activate.bat
   - pip install -U codecov coverage setuptools six wheel
-  - "%BUILD% python .appveyor\\install_numpy.py"
+  - "%BUILD% python .appveyor\\install_numpy_scipy.py"
   - "%BUILD% pip install .[test]"
 
 build: off
