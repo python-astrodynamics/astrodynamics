@@ -22,12 +22,12 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
             pyenv global 3.3.6
             ;;
         py34)
-            pyenv install 3.4.3
-            pyenv global 3.4.3
+            pyenv install 3.4.4
+            pyenv global 3.4.4
             ;;
         py35)
-            pyenv install 3.5.0
-            pyenv global 3.5.0
+            pyenv install 3.5.1
+            pyenv global 3.5.1
             ;;
     esac
     pyenv rehash
