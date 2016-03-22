@@ -58,7 +58,7 @@ install:
 
 script:
   - source ~/.venv/bin/activate
-  - tox
+  - travis_wait 50 tox
 
 after_success:
   - ./.travis/upload_coverage.sh
