@@ -7,9 +7,10 @@ from enum import Enum, unique
 from math import cos, sin, sqrt
 
 import numpy as np
+from represent import ReprHelperMixin
 from scipy.linalg import sqrtm, inv
 
-from ..utils import singledispatch_method
+from ..utils import read_only_property, singledispatch_method
 
 
 def check_convention(convention):
@@ -19,7 +20,12 @@ def check_convention(convention):
             "'frame' for frame transform semantics.")
 
 
-class Rotation(object):
+class Rotation(ReprHelperMixin):
+    q0 = read_only_property('_q0')
+    q1 = read_only_property('_q1')
+    q2 = read_only_property('_q2')
+    q3 = read_only_property('_q3')
+
     def __init__(self, q0, q1, q2, q3, normalized=False):
         if not normalized:
             inv = 1 / sqrt(q0 ** 2 + q1 ** 2 + q2 ** 2 + q3 ** 2)
@@ -28,10 +34,10 @@ class Rotation(object):
             q2 *= inv
             q3 *= inv
 
-        self.q0 = q0
-        self.q1 = q1
-        self.q2 = q2
-        self.q3 = q3
+        self._q0 = q0
+        self._q1 = q1
+        self._q2 = q2
+        self._q3 = q3
 
     @classmethod
     def from_axis_angle(cls, axis, angle, convention='vector'):
@@ -136,6 +142,23 @@ class Rotation(object):
 
     def __inv__(self):
         return Rotation(self.q0, -self.q1, -self.q2, -self.q3, normalized=True)
+
+    def __eq__(self, other):
+        if isinstance(other, Rotation):
+            return all([
+                self.q0 == other.q0,
+                self.q1 == other.q1,
+                self.q2 == other.q2,
+                self.q3 == other.q3,
+            ])
+        else:
+            return NotImplemented
+
+    def _repr_helper_(self, r):
+        r.keyword_from_attr('q0')
+        r.keyword_from_attr('q1')
+        r.keyword_from_attr('q2')
+        r.keyword_from_attr('q3')
 
 
 def _quaternion_from_matrix(ort):
