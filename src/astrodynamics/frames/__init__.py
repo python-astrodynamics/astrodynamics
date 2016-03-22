@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 
 import weakref
 from collections import Sequence
+from math import sin
 
 import astropy.units as u
 import numpy as np
@@ -86,7 +87,7 @@ class Frame(object):
 
     def transform_to(self, destination_frame, date):
         if destination_frame is self:
-            return Transform()
+            return Transform(date)
 
         common = Frame.find_common_ancestor(self, destination_frame)
 
@@ -98,7 +99,7 @@ class Frame(object):
                 frame.transform_provider.get_transform(date) +
                 common_to_instance)
 
-        common_to_destination = Transform()
+        common_to_destination = Transform(date)
         for frame in destination_frame.ancestors:
             if frame is common:
                 break
@@ -160,17 +161,15 @@ GCRF = FrameProxy(gcrf_factory)
 
 
 def eme2000_factory():
+    from astropy._erfa import bi00
+
     # Obliquity of the ecliptic.
     EPSILON_0 = 84381.448 * u.arcsec
 
-    # Bias in longitude.
-    D_PSI_B = -0.041775 * u.arcsec
-
-    # Bias in obliquity.
-    D_EPSILON_B = -0.0068192 * u.arcsec
-
-    # Right Ascension of the 2000 equinox in ICRS frame.
-    ALPHA_0 = -0.0146 * u.arcsec
+    # D_PSI_B: Longitude correction
+    # D_EPSILON_B: Obliquity correction
+    # ALPHA_0: the ICRS right ascension of the J2000.0 mean equinox
+    D_PSI_B, D_EPSILON_B, ALPHA_0 = bi00()
 
     J2000_EPOCH = Time('J2000', scale='tt')
 
@@ -178,8 +177,9 @@ def eme2000_factory():
     J = np.array([0, 1, 0])
     K = np.array([0, 0, 1])
 
+    # Obliquity correction
     r1 = Rotation.from_axis_angle(axis=I, angle=D_EPSILON_B)
-    r2 = Rotation.from_axis_angle(axis=J, angle=-D_PSI_B * np.sin(EPSILON_0))
+    r2 = Rotation.from_axis_angle(axis=J, angle=-D_PSI_B * sin(EPSILON_0))
     r3 = Rotation.from_axis_angle(axis=K, angle=-ALPHA_0)
 
     transform_provider = FixedTransformProvider(

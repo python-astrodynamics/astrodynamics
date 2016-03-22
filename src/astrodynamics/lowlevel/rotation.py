@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 from enum import Enum, unique
 from math import cos, sin, sqrt
 
+import astropy.units as u
 import numpy as np
 from represent import ReprHelperMixin
 from scipy.linalg import sqrtm, inv
@@ -49,6 +50,9 @@ class Rotation(ReprHelperMixin):
         norm = np.linalg.norm(axis)
         if norm == 0:
             raise ValueError('Zero norm for rotation axis.')
+
+        if isinstance(angle, u.Quantity):
+            angle = angle.to(u.rad).value
 
         half_angle = -0.5 * angle if convention == 'vector' else 0.5
         coeff = sin(half_angle) / norm
