@@ -5,6 +5,13 @@ cache:
     - $HOME/.cache/pip
     # OS X cache not yet enabled: https://github.com/travis-ci/travis-ci/issues/4011
     - $HOME/Library/Caches/pip
+addons:
+  apt:
+    packages:
+    - libatlas-dev
+    - libatlas-base-dev
+    - liblapack-dev
+    - gfortran
 matrix:
   include:
     - python: 2.7
@@ -24,6 +31,10 @@ matrix:
       addons:
         apt:
           packages:
+            - libatlas-dev
+            - libatlas-base-dev
+            - liblapack-dev
+            - gfortran
             - libenchant-dev
             - graphviz
     - language: generic
