@@ -31,6 +31,10 @@ matrix:
       addons:
         apt:
           packages:
+            - libatlas-dev
+            - libatlas-base-dev
+            - liblapack-dev
+            - gfortran
             - libenchant-dev
             - graphviz
     - language: generic
@@ -55,10 +59,14 @@ before_install:
 
 install:
   - ./.travis/install.sh
+  # Build wheels for cache, but do it here so pip output prevents Travis timing out.
+  # We install numpy since it has to be installed before we can build scipy wheel.
+  - pip install numpy
+  - pip wheel scipy
 
 script:
   - source ~/.venv/bin/activate
-  - travis_wait 50 tox
+  - tox
 
 after_success:
   - ./.travis/upload_coverage.sh
