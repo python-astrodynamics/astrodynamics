@@ -4,14 +4,18 @@
 from __future__ import absolute_import, division, print_function
 
 from enum import Enum, unique
-from math import cos, sin, sqrt
+from math import acos, asin, cos, sin, sqrt
 
 import astropy.units as u
 import numpy as np
 from represent import ReprHelperMixin
 from scipy.linalg import sqrtm, inv
 
-from ..utils import read_only_property, singledispatch_method
+from ..utils import read_only_property
+
+I = np.array([1, 0, 0])
+J = np.array([0, 1, 0])
+K = np.array([0, 0, 1])
 
 
 def check_convention(convention):
@@ -54,7 +58,7 @@ class Rotation(ReprHelperMixin):
         if isinstance(angle, u.Quantity):
             angle = angle.to(u.rad).value
 
-        half_angle = -0.5 * angle if convention == 'vector' else 0.5
+        half_angle = -0.5 * angle if convention == 'vector' else 0.5 * angle
         coeff = sin(half_angle) / norm
 
         q0 = cos(half_angle)
@@ -93,34 +97,68 @@ class Rotation(ReprHelperMixin):
 
         return Rotation(q0, q1, q2, q3, normalized=True)
 
-    @singledispatch_method
-    def apply_to(self, rotation, convention='vector'):
+    @property
+    def angle(self):
+        if self.q0 < -0.1 or self.q0 > 0.1:
+            return 2 * asin(sqrt(self.q1 ** 2 + self.q2 ** 2 + self.q3 ** 2))
+        elif self.q0 < 0:
+            return 2 * acos(-self.q0)
+        else:
+            return 2 * acos(self.q0)
+
+    def get_axis(self, convention='vector'):
         check_convention(convention)
 
-        r = rotation
-        s = self
+        squared_sine = self.q1 ** 2 + self.q2 ** 2 + self.q3 ** 2
+        if squared_sine == 0:
+            return I if convention == 'vector' else -I
+        else:
+            sign = 1 if convention == 'vector' else -1
 
-        q0 = r.q0 * s.q0 - (r.q1 * s.q1 + r.q2 * s.q2 + r.q3 * s.q3)
-        q1 = r.q1 * s.q0 + r.q0 * s.q1 + (r.q2 * s.q3 - r.q3 * s.q2)
-        q2 = r.q2 * s.q0 + r.q0 * s.q2 + (r.q3 * s.q1 - r.q1 * s.q3)
-        q3 = r.q3 * s.q0 + r.q0 * s.q3 + (r.q1 * s.q2 - r.q2 * s.q1)
+            if self.q0 < 0:
+                inverse = sign / sqrt(squared_sine)
+                return np.array([
+                    self.q1 * inverse, self.q2 * inverse, self.q3 * inverse])
 
-        return Rotation(q0, q1, q2, q3, normalized=True)
+            inverse = -sign / sqrt(squared_sine)
+            return np.array([
+                self.q1 * inverse, self.q2 * inverse, self.q3 * inverse])
 
-    @apply_to.register(np.ndarray)
-    def _(self, vector):
+    @property
+    def matrix(self):
+        q0q0 = self.q0 * self.q0
+        q0q1 = self.q0 * self.q1
+        q0q2 = self.q0 * self.q2
+        q0q3 = self.q0 * self.q3
+        q1q1 = self.q1 * self.q1
+        q1q2 = self.q1 * self.q2
+        q1q3 = self.q1 * self.q3
+        q2q2 = self.q2 * self.q2
+        q2q3 = self.q2 * self.q3
+        q3q3 = self.q3 * self.q3
+
+        m = np.zeros((3, 3))
+        m[0][0] = 2 * (q0q0 + q1q1) - 1
+        m[1][0] = 2 * (q1q2 - q0q3)
+        m[2][0] = 2 * (q1q3 + q0q2)
+
+        m[0][1] = 2 * (q1q2 + q0q3)
+        m[1][1] = 2 * (q0q0 + q2q2) - 1
+        m[2][1] = 2 * (q2q3 - q0q1)
+
+        m[0][2] = 2 * (q1q3 - q0q2)
+        m[1][2] = 2 * (q2q3 + q0q1)
+        m[2][2] = 2 * (q0q0 + q3q3) - 1
+
+        return m
+
+    def apply_to(self, vector):
         x = vector[0]
         y = vector[1]
         z = vector[2]
 
         r = self.q1 * x + self.q2 * y + self.q3 * z
         s = self
-
-        print([
-            2 * (s.q0 * (x * s.q0 - (s.q2 * z - s.q3 * y)) + r * s.q1) - x,
-            2 * (s.q0 * (y * s.q0 - (s.q3 * x - s.q1 * z)) + r * s.q2) - y,
-            2 * (s.q0 * (z * s.q0 - (s.q1 * y - s.q2 * x)) + r * s.q3) - z
-        ])
 
         return np.array([
             2 * (s.q0 * (x * s.q0 - (s.q2 * z - s.q3 * y)) + r * s.q1) - x,
@@ -144,7 +182,7 @@ class Rotation(ReprHelperMixin):
 
         return Rotation(q0, q1, q2, q3, normalized=True)
 
-    def __inv__(self):
+    def __invert__(self):
         return Rotation(self.q0, -self.q1, -self.q2, -self.q3, normalized=True)
 
     def __eq__(self, other):
