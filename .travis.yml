@@ -12,6 +12,9 @@ addons:
     - libatlas-base-dev
     - liblapack-dev
     - gfortran
+env:
+  global:
+    - TOX_TESTENV_PASSENV=CI
 matrix:
   include:
     - python: 2.7
