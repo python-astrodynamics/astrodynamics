@@ -77,7 +77,7 @@ class Rotation(ReprHelperMixin):
         return cls(*_quaternion_from_matrix(ort), normalized=True)
 
     @classmethod
-    def from_euler_angles(order, alpha1, alpha2, alpha3, convention='vector'):
+    def from_euler_angles(cls, order, alpha1, alpha2, alpha3, convention='vector'):
         check_convention(convention)
 
         r1 = Rotation.from_axis_angle(order.a1, alpha1, convention)
