@@ -38,7 +38,7 @@ fi
 
 python -m virtualenv ~/.venv
 source ~/.venv/bin/activate
-pip install tox codecov
+pip install -U tox codecov setuptools wheel
 
 # Build wheels for cache, but do it here so pip output prevents Travis timing out.
 # We install numpy since it has to be installed before we can build scipy wheel.
