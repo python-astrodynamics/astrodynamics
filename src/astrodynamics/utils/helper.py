@@ -8,7 +8,6 @@ from astropy import units as u
 from astropy.units import Unit, UnitBase
 
 from ..compat.contextlib import suppress
-from ..compat.functools import singledispatch, update_wrapper
 from ..compat.math import isclose
 from .compat import PY33
 
@@ -148,18 +147,3 @@ def prefix(prefix, iterable):
     """Prepend items from `iterable` with `prefix` string."""
     for x in iterable:
         yield '{prefix}{x}'.format(prefix=prefix, x=x)
-
-
-def singledispatch_method(func):
-    """Adaption of :func:`functools.singledispatch` that works on methods.
-
-    Taken from http://stackoverflow.com/a/24602374/2093785
-    """
-    dispatcher = singledispatch(func)
-
-    def wrapper(*args, **kw):
-        return dispatcher.dispatch(args[1].__class__)(*args, **kw)
-
-    wrapper.register = dispatcher.register
-    update_wrapper(wrapper, dispatcher)
-    return wrapper

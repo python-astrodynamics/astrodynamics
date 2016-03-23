@@ -7,7 +7,6 @@ from .helper import (
     prefix,
     qisclose,
     read_only_property,
-    singledispatch_method,
     suppress_file_exists_error,
     verify_unit
 )
@@ -41,7 +40,6 @@ __all__ = (
     'SPK_OLD_URL',
     'SPK_URL',
     'SPKDownloadError',
-    'singledispatch_method',
     'suppress_file_exists_error',
     'verify_unit',
     'WINDOWS',
