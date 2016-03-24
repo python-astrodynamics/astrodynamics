@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function
 
 import re
 import sys
-from collections import defaultdict
 
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand  # noqa
@@ -35,20 +34,7 @@ requires = {
     'six',
 }
 
-
-def add_to_extras(extras_require, dest, source):
-    """Add dependencies from `source` extra to `dest` extra, handling
-    conditional dependencies.
-    """
-    for key, deps in list(extras_require.items()):
-        extra, _, condition = key.partition(':')
-        if extra == source:
-            if condition:
-                extras_require[dest + ':' + condition] |= deps
-            else:
-                extras_require[dest] |= deps
-
-extras_require = defaultdict(set)
+extras_require = dict()
 
 extras_require[':python_version<"3.4"'] = {'enum34', 'pathlib'}
 
@@ -58,30 +44,6 @@ extras_require['test'] = {
 }
 
 extras_require['test:python_version<"3.3"'] = {'mock'}
-
-extras_require['dev'] = {
-    'doc8',
-    'flake8',
-    'flake8-coding',
-    'flake8-future-import',
-    'isort',
-    'pep8-naming',
-    'plumbum>=1.6.0',
-    'pyenchant',
-    'pytest-cov',
-    'shovel',
-    'sphinx',
-    'sphinx_rtd_theme',
-    'sphinxcontrib-spelling',
-    'tabulate',
-    'tox',
-    'twine',
-    'watchdog',
-}
-
-add_to_extras(extras_require, 'dev', 'test')
-
-extras_require = dict(extras_require)
 
 
 class PyTest(TestCommand):

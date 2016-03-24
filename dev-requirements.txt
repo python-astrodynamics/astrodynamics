@@ -1,0 +1,18 @@
+-e .[test]
+doc8
+flake8
+flake8-coding
+flake8-future-import
+isort
+pep8-naming
+plumbum>=1.6.0
+pyenchant
+pytest-cov
+shovel
+sphinx
+sphinx_rtd_theme
+sphinxcontrib-spelling
+tabulate
+tox
+twine
+watchdog

@@ -4,15 +4,15 @@ Getting started
 
 Working on ``astrodynamics`` requires the installation of some
 development dependencies. These can be installed in a `virtualenv`_
-using `pip`_ with the ``dev`` extras. You should install
-``astrodynamics`` in ``editable`` mode.
+using `pip`_ with the ``dev-requirements.txt`` file. This installs the
+dependencies and installs ``astrodynamics`` in editable mode.
 
 For example:
 
 .. code-block:: console
 
     $ # Create a virtualenv and activate it
-    $ pip install --editable .[dev]
+    $ pip install -r dev-requirements.txt
 
 You are now ready to run the tests and build the documentation.
 
