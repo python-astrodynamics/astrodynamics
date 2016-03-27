@@ -4,18 +4,21 @@
 from __future__ import absolute_import, division, print_function
 
 from enum import Enum, unique
-from math import acos, asin, cos, sin, sqrt
+from math import acos, asin, atan2, cos, pi, sin, sqrt
 
 import astropy.units as u
 import numpy as np
 from represent import ReprHelperMixin
 from scipy.linalg import sqrtm, inv
 
+from ..compat.math import isclose
 from ..utils import read_only_property
 
 I = np.array([1, 0, 0])
 J = np.array([0, 1, 0])
 K = np.array([0, 0, 1])
+
+TWOPI = 2 * pi
 
 
 def check_convention(convention):
@@ -84,9 +87,9 @@ class Rotation(ReprHelperMixin):
     def from_euler_angles(cls, order, alpha1, alpha2, alpha3, convention='vector'):
         check_convention(convention)
 
-        r1 = Rotation.from_axis_angle(order.a1, alpha1, convention)
-        r2 = Rotation.from_axis_angle(order.a2, alpha2, convention)
-        r3 = Rotation.from_axis_angle(order.a3, alpha3, convention)
+        r1 = Rotation.from_axis_angle(order.axis1, alpha1, convention)
+        r2 = Rotation.from_axis_angle(order.axis2, alpha2, convention)
+        r3 = Rotation.from_axis_angle(order.axis3, alpha3, convention)
 
         composed = r1.compose(r2.compose(r3, convention), convention)
 
@@ -123,6 +126,84 @@ class Rotation(ReprHelperMixin):
             inverse = -sign / sqrt(squared_sine)
             return np.array([
                 self.q1 * inverse, self.q2 * inverse, self.q3 * inverse])
+
+    def get_angles(self, order, convention='vector'):
+        check_convention(convention)
+
+        tait_bryan_angles = {
+            RotationOrder.XYZ,
+            RotationOrder.XZY,
+            RotationOrder.YXZ,
+            RotationOrder.YZX,
+            RotationOrder.ZXY,
+            RotationOrder.ZYX,
+        }
+
+        a1y_sign = 1
+        a1x_sign = 1
+        a2_sign = 1
+        a3y_sign = 1
+        a3x_sign = 1
+
+        if order in tait_bryan_angles:
+            if order in (RotationOrder.XYZ, RotationOrder.YZX,
+                         RotationOrder.ZXY):
+                a1y_sign = -1
+                a3y_sign = -1
+            elif order in (RotationOrder.XZY, RotationOrder.YXZ,
+                           RotationOrder.ZYX):
+                a2_sign = -1
+
+            if convention == 'vector':
+                v1 = self.apply_to(order.axis3)
+                v2 = (~self).apply_to(order.axis1)
+                a1_v = v1
+                a2_index = order.index3
+                a3_v = v2
+            else:
+                v1 = self.apply_to(order.axis1)
+                v2 = (~self).apply_to(order.axis3)
+                a1_v = v2
+                a2_index = order.index1
+                a3_v = v1
+
+            if isclose(abs(v2[a2_index]), 1, abs_tol=1e-15):
+                raise ValueError
+
+            return (
+                atan2(a1y_sign * a1_v[order.index2], a1x_sign * a1_v[order.index3]),
+                a2_sign * asin(v2[a2_index]),
+                atan2(a3y_sign * a3_v[order.index2], a3x_sign * a3_v[order.index1])
+            )
+        else:
+            if order in (RotationOrder.XZX, RotationOrder.YXY,
+                         RotationOrder.ZYZ):
+                a3x_sign = -1
+            elif order in (RotationOrder.XYX, RotationOrder.YZY,
+                           RotationOrder.ZXZ):
+                a1x_sign = -1
+
+            other_index = {0, 1, 2} - {order.index1, order.index2, order.index3}
+            other_index, = other_index
+
+            v1 = self.apply_to(order.axis3)
+            v2 = (~self).apply_to(order.axis1)
+
+            if isclose(abs(v2[order.index3]), 1, abs_tol=1e-15):
+                raise ValueError
+
+            if convention == 'vector':
+                a1_v = v1
+                a3_v = v2
+            else:
+                a1_v = v2
+                a3_v = v1
+
+            return (
+                atan2(a1y_sign * a1_v[order.index2], a1x_sign * a1_v[other_index]),
+                a2_sign * acos(v2[order.index3]),
+                atan2(a3y_sign * a3_v[order.index2], a3x_sign * a3_v[other_index])
+            )
 
     @property
     def matrix(self):
@@ -261,27 +342,39 @@ def _quaternion_from_matrix(ort):
     return quat
 
 
-I = [1, 0, 0]
-J = [0, 1, 0]
-K = [0, 0, 1]
-
-
 @unique
 class RotationOrder(Enum):
-    XYZ = (I, J, K)
-    XZY = (I, K, J)
-    YXZ = (J, I, K)
-    YZX = (J, K, I)
-    ZXY = (K, I, J)
-    ZYX = (K, J, I)
-    XYX = (I, J, I)
-    XZX = (I, K, I)
-    YXY = (J, I, J)
-    YZY = (J, K, J)
-    ZXZ = (K, I, K)
-    ZYZ = (K, J, K)
+    XYZ = 1
+    XZY = 2
+    YXZ = 3
+    YZX = 4
+    ZXY = 5
+    ZYX = 6
+    XYX = 7
+    XZX = 8
+    YXY = 9
+    YZY = 10
+    ZXZ = 11
+    ZYZ = 12
 
-    def __init__(self, a1, a2, a3):
-        self.a1 = np.array(a1)
-        self.a2 = np.array(a2)
-        self.a3 = np.array(a3)
+    def __init__(self, value):
+        axis1, axis2, axis3 = self.name
+        indices = {'X': 0, 'Y': 1, 'Z': 2}
+
+        arrays = [I, J, K]
+
+        index1 = indices[axis1]
+        index2 = indices[axis2]
+        index3 = indices[axis3]
+
+        self.axis1 = np.array(arrays[index1])
+        self.axis2 = np.array(arrays[index2])
+        self.axis3 = np.array(arrays[index3])
+
+        self.index1 = index1
+        self.index2 = index2
+        self.index3 = index3
+
+
+def normalize_angle(a, center=pi):
+    return a - TWOPI * np.floor((a + pi - center) / TWOPI)
