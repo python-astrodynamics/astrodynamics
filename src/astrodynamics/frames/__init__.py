@@ -164,7 +164,7 @@ def eme2000_factory():
     from astropy._erfa import bi00
 
     # Obliquity of the ecliptic.
-    EPSILON_0 = 84381.448 * u.arcsec
+    EPSILON_0 = (84381.448 * u.arcsec).to(u.rad).value
 
     # D_PSI_B: Longitude correction
     # D_EPSILON_B: Obliquity correction
@@ -183,7 +183,7 @@ def eme2000_factory():
     r3 = Rotation.from_axis_angle(axis=K, angle=-ALPHA_0)
 
     transform_provider = FixedTransformProvider(
-        Transform(date=J2000_EPOCH, rot=r1.apply_to(r2.apply_to(r3))))
+        Transform(date=J2000_EPOCH, rot=r1.compose(r2.compose(r3))))
 
     EME2000 = Frame(
         parent=GCRF,
