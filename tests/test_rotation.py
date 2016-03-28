@@ -190,16 +190,16 @@ def test_matrix_other():
     RotationOrder.YZY,
     RotationOrder.ZXZ,
 ])
-@pytest.mark.parametrize('alpha1', np.arange(0.1, 6.2, 0.3))
-@pytest.mark.parametrize('alpha2', np.arange(0.05, 3.1, 0.3))
-@pytest.mark.parametrize('alpha3', np.arange(0.1, 6.2, 0.3))
-def test_euler_angles_proper(convention, order, alpha1, alpha2, alpha3):
-    r = Rotation.from_euler_angles(
-        order, alpha1, alpha2, alpha3, convention=convention)
-    angles = r.get_angles(order, convention=convention)
-    check_angle(angles[0], alpha1)
-    check_angle(angles[1], alpha2)
-    check_angle(angles[2], alpha3)
+def test_euler_angles_proper(convention, order):
+    for alpha1 in np.arange(0.1, 6.2, 0.3):
+        for alpha2 in np.arange(0.05, 3.1, 0.3):
+            for alpha3 in np.arange(0.1, 6.2, 0.3):
+                r = Rotation.from_euler_angles(
+                    order, alpha1, alpha2, alpha3, convention=convention)
+                angles = r.get_angles(order, convention=convention)
+                check_angle(angles[0], alpha1)
+                check_angle(angles[1], alpha2)
+                check_angle(angles[2], alpha3)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
@@ -211,34 +211,34 @@ def test_euler_angles_proper(convention, order, alpha1, alpha2, alpha3):
     RotationOrder.ZXY,
     RotationOrder.ZYX,
 ])
-@pytest.mark.parametrize('alpha1', np.arange(0.1, 6.2, 0.3))
-@pytest.mark.parametrize('alpha2', np.arange(-1.55, 1.55, 0.3))
-@pytest.mark.parametrize('alpha3', np.arange(0.1, 6.2, 0.3))
-def test_euler_angles_tait_bryan(convention, order, alpha1, alpha2, alpha3):
-    r = Rotation.from_euler_angles(
-        order, alpha1, alpha2, alpha3, convention=convention)
-    angles = r.get_angles(order, convention=convention)
-    check_angle(angles[0], alpha1)
-    check_angle(angles[1], alpha2)
-    check_angle(angles[2], alpha3)
+def test_euler_angles_tait_bryan(convention, order):
+    for alpha1 in np.arange(0.1, 6.2, 0.3):
+        for alpha2 in np.arange(-1.55, 1.55, 0.3):
+            for alpha3 in np.arange(0.1, 6.2, 0.3):
+                r = Rotation.from_euler_angles(
+                    order, alpha1, alpha2, alpha3, convention=convention)
+                angles = r.get_angles(order, convention=convention)
+                check_angle(angles[0], alpha1)
+                check_angle(angles[1], alpha2)
+                check_angle(angles[2], alpha3)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
-@pytest.mark.parametrize('x', np.arange(-0.9, 0.9, 0.2))
-@pytest.mark.parametrize('y', np.arange(-0.9, 0.9, 0.2))
-@pytest.mark.parametrize('z', np.arange(-0.9, 0.9, 0.2))
-def test_compose(convention, x, y, z):
+def test_compose(convention):
     r1 = Rotation.from_axis_angle(np.array([2, -3, 5]), 1.7, convention=convention)
     r2 = Rotation.from_axis_angle(np.array([-1, 3, 2]), 0.3, convention=convention)
     r3 = r2.compose(r1, convention=convention)
 
-    u = np.array([x, y, z])
+    for x in np.arange(-0.9, 0.9, 0.2):
+        for y in np.arange(-0.9, 0.9, 0.2):
+            for z in np.arange(-0.9, 0.9, 0.2):
+                u = np.array([x, y, z])
 
-    if convention == 'vector':
-        v1 = r2.apply_to(r1.apply_to(u))
-        v2 = r3.apply_to(u)
-    elif convention == 'frame':
-        v1 = r1.apply_to(r2.apply_to(u))
-        v2 = r3.apply_to(u)
+                if convention == 'vector':
+                    v1 = r2.apply_to(r1.apply_to(u))
+                    v2 = r3.apply_to(u)
+                elif convention == 'frame':
+                    v1 = r1.apply_to(r2.apply_to(u))
+                    v2 = r3.apply_to(u)
 
-    check_vector(v1, v2)
+                check_vector(v1, v2)
