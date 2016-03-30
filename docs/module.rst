@@ -7,4 +7,5 @@ Module Reference
 
   modules/bodies/index
   modules/constants
+  modules/frames/index
   modules/utils/index

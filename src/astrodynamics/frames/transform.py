@@ -1,16 +1,18 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 
 import astropy.units as u
 import numpy as np
+import six
 
 from ..lowlevel.rotation import Rotation
 from ..utils import read_only_property, verify_unit
 
 
-class AbstractTransformProvider(ABC):
+@six.add_metaclass(ABCMeta)
+class AbstractTransformProvider(object):
     @abstractmethod
     def get_transform(self, date):
         raise NotImplementedError
@@ -64,6 +66,45 @@ class Transform(object):
         self._rotation = rot
         self._angular_velocity = verify_unit(ang_vel, 'rad / s')
         self._angular_acceleration = verify_unit(ang_acc, 'rad / s2')
+
+    def transform_position(self, position):
+        verify_unit(position, 'm')
+        return self.rotation.apply_to(self.translation.si.value + position.si.value) * u.m
+
+    def transform(self, position, velocity, acceleration=None):
+        p1 = self.translation.si.value
+        v1 = self.velocity.si.value
+        a1 = self.acceleration.si.value
+        o1 = self.angular_velocity.si.value
+        o1_dot = self.angular_acceleration.si.value
+
+        p2 = verify_unit(position, 'm').si.value
+        v2 = verify_unit(velocity, 'm / s').si.value
+
+        if acceleration is not None:
+            a2 = verify_unit(acceleration, 'm / s2').si.value
+        else:
+            a2 = np.zeros(3)
+
+        p2 = vector_linear_combination(1, p2, 1, p1)
+        v2 = vector_linear_combination(1, v2, 1, v1)
+        a2 = vector_linear_combination(1, a2, 1, a1)
+
+        pt = self.rotation.apply_to(p2)
+        cross_p = np.cross(o1, pt)
+        vt = self.rotation.apply_to(v2) - cross_p
+        cross_v = np.cross(o1, cross_p)
+        cross_cross_p = np.cross(o1, cross_p)
+        cross_dot_p = np.cross(o1_dot, pt)
+
+        u1 = self.rotation.apply_to(a2)
+        u2 = cross_v
+        u3 = cross_cross_p
+        u4 = cross_dot_p
+
+        at = vector_linear_combination(1, u1, -2, u2, -1, u3, -1, u4)
+        return pt * u.m, vt * u.m / u.s, at * u.m / u.s ** 2
+
 
     def __add__(self, other):
         if not isinstance(other, Transform):
@@ -123,7 +164,7 @@ class Transform(object):
             ang_vel=ang_vel * u.rad / u.s,
             ang_acc=ang_acc * u.rad / u.s ** 2)
 
-    def __inv__(self):
+    def __invert__(self):
         p = self.translation.to(u.m).value
         v = self.velocity.to(u.m / u.s).value
         a = self.acceleration.to(u.m / u.s ** 2).value
@@ -138,7 +179,7 @@ class Transform(object):
         o_x_rp = np.cross(o, rp)
 
         trans = -rp
-        vel = np.cross(o_x_rp - rv)
+        vel = o_x_rp - rv
 
         o_x_rv = np.cross(o, rv)
         o_dot_x_rp = np.cross(o_dot, rp)
@@ -165,7 +206,13 @@ class Transform(object):
             ang_acc=ang_acc * u.rad / u.s ** 2)
 
 
-def vector_linear_combination(a1, u1, a2, u2, a3, u3, a4, u4):
+def vector_linear_combination(a1, u1, a2, u2, a3=None, u3=None, a4=None, u4=None):
+    if u3 is None:
+        u3 = (None, None, None)
+
+    if u4 is None:
+        u4 = (None, None, None)
+
     return np.array([
         linear_combination(a1, u1[0], a2, u2[0], a3, u3[0], a4, u4[0]),
         linear_combination(a1, u1[1], a2, u2[1], a3, u3[1], a4, u4[1]),
@@ -198,7 +245,11 @@ def linear_combination(a1, b1, a2, b2, a3=None, b3=None, a4=None, b4=None):
         [0, 0, 0, b4],
     ])
     y = np.array([a1, a2, a3, a4])
-    return np.sum(np.linalg.solve(x, y))
+    try:
+        result = np.sum(np.linalg.solve(x, y))
+    except np.linalg.LinAlgError:
+        result = a1 * b1 + a2 * b2 + a3 * b3 + a4 * b4
+    return result
 
 
 class FixedTransformProvider(AbstractTransformProvider):
@@ -206,4 +257,6 @@ class FixedTransformProvider(AbstractTransformProvider):
         self.transform = transform
 
     def get_transform(self, date):
+        self.transform._date = date
+        # TODO: 'replace' method for new date
         return self.transform
