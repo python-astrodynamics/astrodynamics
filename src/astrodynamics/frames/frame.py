@@ -190,55 +190,8 @@ class Frame(AbstractFrame):
         return str(r)
 
 
-def lazy_init(f):
-    @wraps(f)
-    def wrapper(self, *args, **kwargs):
-        self._lazy_init()
-        return f(self, *args, **kwargs)
-    return wrapper
-
-
-def lazy_proxied_property(name, type_, proxy_name):
-    """Return property for accessing attribute with name `name`
-
-    Parameters:
-        name: Attribute name
-        docstring: Optional docstring for getter.
-
-    Example:
-        .. code-block:: python
-
-            class Circle:
-                def __init__(self, radius):
-                    self._radius = radius
-
-                radius = read_only_property('_radius')
-    """
-    @lazy_init
-    def fget(self):
-        return getattr(getattr(self, proxy_name), name)
-
-    proxied = getattr(type_, name)
-    fget.__doc__ = getattr(proxied, '__doc__', None)
-
-    return property(fget)
-
-frame_proxy_property = partial(lazy_proxied_property, type_=Frame, proxy_name='_frame')
-
-
 class FrameProxy(AbstractFrame):
     """Proxy a :class:`Frame` using a factory function for lazy initialisation."""
-    parent = frame_proxy_property('parent')
-    depth = frame_proxy_property('depth')
-    transform_provider = frame_proxy_property('transform_provider')
-    name = frame_proxy_property('name')
-    pseudo_intertial = frame_proxy_property('pseudo_intertial')
-    ancestors = frame_proxy_property('ancestors')
-
-    @property
-    def name(self):
-        self._lazy_init()
-        return self._frame.name
 
     def __init__(self):
         self._factory = None
@@ -255,10 +208,40 @@ class FrameProxy(AbstractFrame):
                 raise RuntimeError('Factory not registered with this FrameProxy')
             self._frame = self._factory()
 
-    @lazy_init
+    @property
+    def parent(self):
+        self._lazy_init()
+        return self._frame.parent
+
+    @property
+    def depth(self):
+        self._lazy_init()
+        return self._frame.depth
+
+    @property
+    def transform_provider(self):
+        self._lazy_init()
+        return self._frame.transform_provider
+
+    @property
+    def name(self):
+        self._lazy_init()
+        return self._frame.name
+
+    @property
+    def pseudo_intertial(self):
+        self._lazy_init()
+        return self._frame.pseudo_intertial
+
+    @property
+    def ancestors(self):
+        self._lazy_init()
+        return self._frame.ancestors
+
     def get_transform_to(self, destination_frame, date):
+        self._lazy_init()
         return self._frame.get_transform_to(destination_frame, date)
 
-    @lazy_init
     def find_common_ancestor(self, from_, to):
+        self._lazy_init()
         return self._frame.find_common_ancestor(from_, to)
