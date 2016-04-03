@@ -27,9 +27,8 @@ def check_rotation(r1, r2):
 
 
 def check_angle(a1, a2):
-    a3 = a1.si.value
-    a4 = normalize_angle(a2, center=a1).si.value
-    assert np.isclose(a3, a4, rtol=0, atol=1e-12)
+    assert np.isclose(
+        a1, normalize_angle(a2, center=a1), rtol=0, atol=1e-12 * u.rad)
 
 
 def test_axis_angle_vector_convention():
@@ -196,16 +195,19 @@ def test_matrix_other():
 ])
 def test_euler_angles_proper_euler(convention, order):
     for alpha1 in np.arange(0.1, 6.2, 0.3):
+        alpha1 *= u.rad
         for alpha2 in np.arange(0.05, 3.1, 0.3):
+            alpha2 *= u.rad
             for alpha3 in np.arange(0.1, 6.2, 0.3):
+                alpha3 = alpha3 * u.rad
                 r = Rotation.from_euler_angles(
-                    order, alpha1 * u.rad, alpha2 * u.rad, alpha3 * u.rad,
+                    order, alpha1, alpha2, alpha3,
                     convention=convention)
 
                 angles = r.get_angles(order, convention=convention)
-                check_angle(angles[0], alpha1 * u.rad)
-                check_angle(angles[1], alpha2 * u.rad)
-                check_angle(angles[2], alpha3 * u.rad)
+                check_angle(angles[0], alpha1)
+                check_angle(angles[1], alpha2)
+                check_angle(angles[2], alpha3)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])

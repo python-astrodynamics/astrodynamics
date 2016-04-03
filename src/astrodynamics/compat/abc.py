@@ -28,6 +28,6 @@ class _abstractstaticmethod(staticmethod):
 
     def __init__(self, callable):
         callable.__isabstractmethod__ = True
-        super().__init__(callable)
+        super(_abstractstaticmethod, self).__init__(callable)
 
 abstractstaticmethod = abstractstaticmethod or _abstractstaticmethod
