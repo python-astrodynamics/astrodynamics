@@ -15,10 +15,10 @@ GCRF = FrameProxy()
 
 @GCRF.register_factory
 def _():
-    J2000_EPOCH = Time('J2000', scale='tt')
+    j2000_epoch = Time('J2000', scale='tt')
 
     transform_provider = FixedTransformProvider(
-        transform=Transform(date=J2000_EPOCH))
+        transform=Transform(date=j2000_epoch))
 
     gcrf = Frame(
         parent=None,

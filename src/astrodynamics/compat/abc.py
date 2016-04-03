@@ -7,7 +7,7 @@ except ImportError:
     abstractstaticmethod = None
 
 
-class _abstractstaticmethod(staticmethod):
+class _abstractstaticmethod(staticmethod):  # noqa
     """
     A decorator indicating abstract staticmethods.
 

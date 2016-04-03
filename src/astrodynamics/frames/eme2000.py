@@ -20,32 +20,32 @@ EME2000 = FrameProxy()
 @EME2000.register_factory
 def _():
     # Obliquity of the ecliptic.
-    EPSILON_0 = 84381.448 * u.arcsec
+    epsilon_0 = 84381.448 * u.arcsec
 
-    D_PSI_B, D_EPSILON_B, ALPHA_0 = bi00()
+    d_psi_b, d_epsilon_b, alpha_0 = bi00()
 
     # Longitude correction
-    D_PSI_B = D_PSI_B * u.rad
+    d_psi_b = d_psi_b * u.rad
 
     # Obliquity correction
-    D_EPSILON_B = D_EPSILON_B * u.rad
+    d_epsilon_b = d_epsilon_b * u.rad
 
     # the ICRS right ascension of the J2000.0 mean equinox
-    ALPHA_0 = ALPHA_0 * u.rad
+    alpha_0 = alpha_0 * u.rad
 
-    J2000_EPOCH = Time('J2000', scale='tt')
+    j2000_epoch = Time('J2000', scale='tt')
 
-    I = np.array([1, 0, 0])
-    J = np.array([0, 1, 0])
-    K = np.array([0, 0, 1])
+    i = np.array([1, 0, 0])
+    j = np.array([0, 1, 0])
+    k = np.array([0, 0, 1])
 
     # Obliquity correction
-    r1 = Rotation.from_axis_angle(axis=I, angle=D_EPSILON_B)
-    r2 = Rotation.from_axis_angle(axis=J, angle=-D_PSI_B * np.sin(EPSILON_0))
-    r3 = Rotation.from_axis_angle(axis=K, angle=-ALPHA_0)
+    r1 = Rotation.from_axis_angle(axis=i, angle=d_epsilon_b)
+    r2 = Rotation.from_axis_angle(axis=j, angle=-d_psi_b * np.sin(epsilon_0))
+    r3 = Rotation.from_axis_angle(axis=k, angle=-alpha_0)
 
     transform_provider = FixedTransformProvider(
-        Transform(date=J2000_EPOCH, rot=r1.compose(r2.compose(r3))))
+        Transform(date=j2000_epoch, rot=r1.compose(r2.compose(r3))))
 
     eme2000 = Frame(
         parent=GCRF,

@@ -39,8 +39,8 @@ class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
                 idx_nearest = idx_sorted[0]
                 return idx_nearest
             else:
-                if abs(value - sorted_array[idx - 1]) < abs(
-                                value - sorted_array[idx]):
+                if (abs(value - sorted_array[idx - 1]) <
+                        abs(value - sorted_array[idx])):
                     idx_nearest = idx_sorted[idx - 1]
                     return idx_nearest
                 else:
@@ -68,24 +68,26 @@ class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
             iers_a['MJD'][idx],
             iers_a['dY_2000A_A'][idx].to(u.rad).value, date.mjd)
 
+        # Position of the Celestial Intermediate Pole (CIP)
         xc = x + dx
         yc = y + dy
 
+        # Position of the Celestial Intermediate Origin (CIO)
         sc = s06(date.jd1, date.jd2, xc, yc)
 
-        x2Py2 = xc ** 2 + yc ** 2
-        zP1 = 1 + sqrt(1 - x2Py2)
-        r = sqrt(x2Py2)
-        sPe2 = 0.5 * (sc + atan2(yc, xc))
-        sPe2cos = cos(sPe2)
-        sPe2sin = sin(sPe2)
-        xPr = xc + r
-        xPrcos = xPr * sPe2cos
-        xPrsin = xPr * sPe2sin
-        yCos = yc * sPe2cos
-        ySin = yc * sPe2sin
-        bpn = Rotation(zP1 * (xPrcos + ySin), -r * (yCos + xPrsin),
-                       r * (xPrcos - ySin), zP1 * (yCos - xPrsin))
+        x2py2 = xc ** 2 + yc ** 2
+        zp1 = 1 + sqrt(1 - x2py2)
+        r = sqrt(x2py2)
+        spe2 = 0.5 * (sc + atan2(yc, xc))
+        spe2_cos = cos(spe2)
+        spe2_sin = sin(spe2)
+        xpr = xc + r
+        xpr_cos = xpr * spe2_cos
+        xpr_sin = xpr * spe2_sin
+        y_cos = yc * spe2_cos
+        y_sin = yc * spe2_sin
+        bpn = Rotation(zp1 * (xpr_cos + y_sin), -r * (y_cos + xpr_sin),
+                       r * (xpr_cos - y_sin), zp1 * (y_cos - xpr_sin))
 
         return Transform(date, rot=bpn)
 

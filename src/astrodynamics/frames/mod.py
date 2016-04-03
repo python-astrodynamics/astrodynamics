@@ -37,10 +37,10 @@ class MODConventions2010TransformProvider(AbstractTransformProvider):
                 'phi',
                 'psi'])
 
-        I = np.array([1, 0, 0])
+        i = np.array([1, 0, 0])
 
         eps0 = obl06(date.jd1, date.jd2) * u.rad
-        r4 = Rotation.from_axis_angle(I, eps0, convention='frame')
+        r4 = Rotation.from_axis_angle(i, eps0, convention='frame')
 
         results = P06eResults(*p06e(date.jd1, date.jd2))
 

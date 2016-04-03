@@ -105,7 +105,6 @@ class Transform(object):
         at = vector_linear_combination(1, u1, -2, u2, -1, u3, -1, u4)
         return pt * u.m, vt * u.m / u.s, at * u.m / u.s ** 2
 
-
     def __add__(self, other):
         if not isinstance(other, Transform):
             return NotImplemented

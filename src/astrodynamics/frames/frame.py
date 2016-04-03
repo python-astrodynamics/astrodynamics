@@ -150,11 +150,11 @@ class AbstractFrame(object):
         raise NotImplementedError
 
     @abstractmethod
-    def get_transform_to(self, date):
+    def get_transform_to(self, destination_frame, date):
         raise NotImplementedError
 
     @abstractstaticmethod
-    def find_common_ancestor(from_, to):
+    def find_common_ancestor(from_, to):  # noqa
         raise NotImplementedError
 
 
@@ -162,10 +162,15 @@ class Frame(AbstractFrame):
     """Reference frame class."""
     parent = read_only_property('_parent', 'Parent frame.')
     depth = read_only_property('_depth', 'Depth of frame in tree.')
-    transform_provider = read_only_property('_transform_provider', 'Provides transform from parent to instance.')
+    transform_provider = read_only_property(
+        '_transform_provider', 'Provides transform from parent to instance.')
+
     name = read_only_property('_name', 'Name of frame.')
-    pseudo_intertial = read_only_property('_pseudo_intertial', 'Whether frame is pseudo-intertial.')
-    ancestors = AncestorsDescriptor("An immutable sequence providing access to this frames' ancestors")
+    pseudo_intertial = read_only_property(
+        '_pseudo_intertial', 'Whether frame is pseudo-intertial.')
+
+    ancestors = AncestorsDescriptor(
+        "An immutable sequence providing access to this frames' ancestors")
 
     def __init__(self, parent, transform_provider, name, pseudo_intertial):
         self._parent = parent

@@ -65,8 +65,8 @@ def test_aas_reference_geo():
     check_vector(p_eme2000_eq_a, p, rtol=0, atol=5.8e-5)
     check_vector(v_eme2000_eq_a, v, rtol=0, atol=6.4e-7)
 
-    p_gcrf_iau_2000_b = np.array([-40588150.3617,-11462167.0397, 27143.2125]) * u.m
-    v_gcrf_iau_2000_b = np.array([834.787458,-2958.305691,-1.172999]) * u.m / u.s
+    p_gcrf_iau_2000_b = np.array([-40588150.3617, -11462167.0397, 27143.2125]) * u.m
+    v_gcrf_iau_2000_b = np.array([834.787458, -2958.305691, -1.172999]) * u.m / u.s
 
     p_eme2000_eq_b = np.array([-40588149.5481, -11462169.9118, 27146.8613]) * u.m
     v_eme2000_eq_b = np.array([834.787667, -2958.305632, -1.172968]) * u.m / u.s

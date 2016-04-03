@@ -13,6 +13,8 @@ from .mod import MOD_CONVENTIONS_2010
 __all__ = (
     'CIRF_CONVENTIONS_2010_SIMPLE_EOP',
     'EME2000',
+    'Frame',
+    'FrameProxy',
     'GCRF',
     'MOD_CONVENTIONS_2010',
 )
