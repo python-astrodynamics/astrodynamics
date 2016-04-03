@@ -75,6 +75,7 @@ class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
         # Position of the Celestial Intermediate Origin (CIO)
         sc = s06(date.jd1, date.jd2, xc, yc)
 
+        # Set up the bias, precession and nutation rotation
         x2py2 = xc ** 2 + yc ** 2
         zp1 = 1 + sqrt(1 - x2py2)
         r = sqrt(x2py2)

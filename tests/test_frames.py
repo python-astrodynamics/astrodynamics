@@ -6,11 +6,9 @@ import numpy as np
 from astropy.time import Time
 
 from astrodynamics.frames import GCRF, EME2000
+from astrodynamics.rotation import Rotation
 
-
-def check_vector(v1, v2, **kwargs):
-    print(v1.si.value - v2.si.value)
-    assert np.allclose(v1.si.value, v2.si.value, **kwargs)
+from .check import check_rotation, check_vector
 
 
 def test_aas_reference_leo():
@@ -30,8 +28,8 @@ def test_aas_reference_leo():
 
     p, v, _ = t.transform(p_gcrf_iau_2000_a, v_gcrf_iau_2000_a)
 
-    check_vector(p_eme2000_eq_a, p, rtol=0, atol=1.1e-4)
-    check_vector(v_eme2000_eq_a, v, rtol=0, atol=2.6e-7)
+    check_vector(p_eme2000_eq_a, p, rtol=0, atol=1.1e-4 * u.m)
+    check_vector(v_eme2000_eq_a, v, rtol=0, atol=2.6e-7 * u.m / u.s)
 
     p_gcrf_iau_2000_b = np.array([5102508.9579, 6123011.4012, 6378136.9277]) * u.m
     v_gcrf_iau_2000_b = np.array([-4743.220156, 790.536495, 5533.755729]) * u.m / u.s
@@ -41,8 +39,8 @@ def test_aas_reference_leo():
 
     p, v, _ = t.transform(p_gcrf_iau_2000_b, v_gcrf_iau_2000_b)
 
-    check_vector(p_eme2000_eq_b, p, rtol=0, atol=7.4e-5)
-    check_vector(v_eme2000_eq_b, v, rtol=0, atol=2.6e-7)
+    check_vector(p_eme2000_eq_b, p, rtol=0, atol=7.4e-5 * u.m)
+    check_vector(v_eme2000_eq_b, v, rtol=0, atol=2.6e-7 * u.m / u.s)
 
 
 def test_aas_reference_geo():
@@ -62,8 +60,8 @@ def test_aas_reference_geo():
 
     p, v, _ = t.transform(p_gcrf_iau_2000_a, v_gcrf_iau_2000_a)
 
-    check_vector(p_eme2000_eq_a, p, rtol=0, atol=5.8e-5)
-    check_vector(v_eme2000_eq_a, v, rtol=0, atol=6.4e-7)
+    check_vector(p_eme2000_eq_a, p, rtol=0, atol=5.8e-5 * u.m)
+    check_vector(v_eme2000_eq_a, v, rtol=0, atol=6.4e-7 * u.m / u.s)
 
     p_gcrf_iau_2000_b = np.array([-40588150.3617, -11462167.0397, 27143.2125]) * u.m
     v_gcrf_iau_2000_b = np.array([834.787458, -2958.305691, -1.172999]) * u.m / u.s
@@ -73,5 +71,14 @@ def test_aas_reference_geo():
 
     p, v, _ = t.transform(p_gcrf_iau_2000_b, v_gcrf_iau_2000_b)
 
-    check_vector(p_eme2000_eq_b, p, rtol=0, atol=1.1e-4)
-    check_vector(v_eme2000_eq_b, v, rtol=0, atol=5.5e-7)
+    check_vector(p_eme2000_eq_b, p, rtol=0, atol=1.1e-4 * u.m)
+    check_vector(v_eme2000_eq_b, v, rtol=0, atol=5.5e-7 * u.m / u.s)
+
+
+def test_erfa_bp00():
+    t = Time('2004-02-14', scale='utc')
+    from astropy._erfa import bp00
+    rb, rp, rbp = bp00(t.jd1, t.jd2)
+    r1 = Rotation.from_matrix(rb)
+    r2 = GCRF.get_transform_to(EME2000, t).rotation
+    check_rotation(r1, r2)

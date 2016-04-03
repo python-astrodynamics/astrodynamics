@@ -7,28 +7,13 @@ import astropy.units as u
 import numpy as np
 import pytest
 from astrodynamics.compat.math import isclose
-from astrodynamics.rotation import (
-    Rotation, RotationOrder, normalize_angle)
+from astrodynamics.rotation import Rotation, RotationOrder
+
+from .check import check_angle, check_rotation, check_vector
 
 I = np.array([1, 0, 0])
 J = np.array([0, 1, 0])
 K = np.array([0, 0, 1])
-
-
-def check_vector(v1, v2):
-    assert np.allclose(v1, v2, rtol=0, atol=1e-15)
-
-
-def check_rotation(r1, r2):
-    assert isclose(r1.q0, r2.q0, rel_tol=0, abs_tol=1e-15)
-    assert isclose(r1.q1, r2.q1, rel_tol=0, abs_tol=1e-15)
-    assert isclose(r1.q2, r2.q2, rel_tol=0, abs_tol=1e-15)
-    assert isclose(r1.q3, r2.q3, rel_tol=0, abs_tol=1e-15)
-
-
-def check_angle(a1, a2):
-    assert np.isclose(
-        a1, normalize_angle(a2, center=a1), rtol=0, atol=1e-12 * u.rad)
 
 
 def test_axis_angle_vector_convention():
