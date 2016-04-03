@@ -25,13 +25,13 @@ def _():
     D_PSI_B, D_EPSILON_B, ALPHA_0 = bi00()
 
     # Longitude correction
-    D_PSI_B *= u.rad
+    D_PSI_B = D_PSI_B * u.rad
 
     # Obliquity correction
-    D_EPSILON_B *= u.rad
+    D_EPSILON_B = D_EPSILON_B * u.rad
 
     # the ICRS right ascension of the J2000.0 mean equinox
-    ALPHA_0 *= u.rad
+    ALPHA_0 = ALPHA_0 * u.rad
 
     J2000_EPOCH = Time('J2000', scale='tt')
 

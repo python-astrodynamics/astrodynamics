@@ -5,12 +5,13 @@
 from __future__ import absolute_import, division, print_function
 
 import weakref
-from abc import ABCMeta, abstractmethod, abstractproperty, abstractstaticmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 from collections import Sequence
 
 import six
 from represent import ReprHelper
 
+from ..compat.abc import abstractstaticmethod
 from ..utils import read_only_property
 from .transform import Transform
 
