@@ -2,6 +2,9 @@
 Frames
 ******
 
-.. automodule:: astrodynamics.frames
-   :members:
-   :show-inheritance:
+.. py:module:: astrodynamics.frames
+
+.. toctree::
+   :maxdepth: 2
+
+   frame

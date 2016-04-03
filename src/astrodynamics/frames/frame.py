@@ -7,7 +7,6 @@ from __future__ import absolute_import, division, print_function
 import weakref
 from abc import ABCMeta, abstractmethod, abstractproperty, abstractstaticmethod
 from collections import Sequence
-from functools import partial, wraps
 
 import six
 from represent import ReprHelper
@@ -17,7 +16,35 @@ from .transform import Transform
 
 
 class AncestorsDescriptor(object):
-    """Use :class:`AncestorsProxy` to add an ``ancestors`` attribute to a class."""
+    """Uses :class:`AncestorsProxy` to add an attribute (typically called
+    ``ancestors``) to a class.
+
+    Parameters:
+        doc (str): docstring for attribute.
+
+    The owning class must adhere to the following protocol:
+
+    * A ``parent`` attribute referencing its parent.
+    * A ``depth`` attribute such that ``self.depth == parent.depth + 1``.
+    * An object without a parent has ``parent=None`` and ``depth=0``.
+
+    .. doctest::
+
+        >>> from astrodynamics.frames.frame import AncestorsDescriptor
+        >>> class Node:
+        ...     ancestors = AncestorsDescriptor("Docstring")
+        ...     def __init__(self, parent=None):
+        ...         self.parent = parent
+        ...         self.depth = parent.depth + 1 if parent is not None else 0
+        >>> a = Node()
+        >>> b = Node(a)
+        >>> len(b.ancestors)
+        2
+        >>> b.ancestors[0] == b
+        True
+        >>> b.ancestors[1] == a
+        True
+    """
     def __init__(self, doc=None):
         self.instances = weakref.WeakKeyDictionary()
         if doc is not None:
@@ -54,7 +81,7 @@ class AncestorsProxy(Sequence):
     .. note::
 
         The recommended usage is adding :class:`AncestorsDescriptor` to a
-        class with the ``parent`` attribute.
+        class which has a ``parent`` attribute.
     """
     def __init__(self, instance):
         self._ancestor_refs = [weakref.ref(instance)]
@@ -90,11 +117,13 @@ class AncestorsProxy(Sequence):
             return [ref() for ref in self._ancestor_refs[item]]
 
     def __len__(self):
-        return self.depth + 1
+        ref = self._ancestor_refs[0]
+        return ref().depth + 1
 
 
 @six.add_metaclass(ABCMeta)
 class AbstractFrame(object):
+    """Abstract Frame class."""
     @abstractproperty
     def parent(self):
         raise NotImplementedError
@@ -191,16 +220,34 @@ class Frame(AbstractFrame):
 
 
 class FrameProxy(AbstractFrame):
-    """Proxy a :class:`Frame` using a factory function for lazy initialisation."""
+    """Proxy a :class:`Frame` using a factory function for lazy initialisation.
 
-    def __init__(self):
-        self._factory = None
+    Parameters:
+        factory (Frame): Optional factory function that returns the frame to be
+                         proxied. Alternatively, the :meth:`register_factory`
+                         method may be used as a decorator.
+    """
+
+    def __init__(self, factory=None):
+        self._factory = factory
         self._frame = None
 
     def register_factory(self, factory):
+        """Decorator to provide :class:`FrameProxy` instance with factory
+        function. This is an alternative to passing a factory
+
+        .. code-block:: python
+
+            MyFrame = FrameProxy()
+
+            @MyFrame.register_factory
+            def _():
+                return Frame(...)
+        """
         if self._factory is not None:
             raise RuntimeError('This FrameProxy already has a registered factory.')
         self._factory = factory
+        return factory
 
     def _lazy_init(self):
         if self._frame is None:

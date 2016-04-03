@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 
 from .cirf import CIRF_CONVENTIONS_2010_SIMPLE_EOP
 from .eme2000 import EME2000
+from .frame import Frame, FrameProxy
 from .gcrf import GCRF
 from .mod import MOD_CONVENTIONS_2010
 
