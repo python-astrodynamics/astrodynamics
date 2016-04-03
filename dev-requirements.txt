@@ -9,7 +9,7 @@ plumbum>=1.6.0
 pyenchant
 pytest-cov
 shovel
-sphinx
+sphinx>=1.4.0
 sphinx_rtd_theme
 sphinxcontrib-spelling
 tabulate

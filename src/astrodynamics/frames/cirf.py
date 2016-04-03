@@ -13,7 +13,7 @@ from astropy._erfa import s06, bpn2xy, pnm06a
 from astropy.utils.iers import IERS_A, IERS_A_URL
 from scipy.interpolate import pchip_interpolate
 
-from ..lowlevel.rotation import Rotation
+from ..rotation import Rotation
 from .frame import Frame, FrameProxy
 from .gcrf import GCRF
 from .transform import AbstractTransformProvider, Transform

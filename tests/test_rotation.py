@@ -3,10 +3,11 @@ from __future__ import absolute_import, division, print_function
 
 from math import pi, sqrt
 
+import astropy.units as u
 import numpy as np
 import pytest
 from astrodynamics.compat.math import isclose
-from astrodynamics.lowlevel.rotation import (
+from astrodynamics.rotation import (
     Rotation, RotationOrder, normalize_angle)
 
 I = np.array([1, 0, 0])
@@ -15,23 +16,25 @@ K = np.array([0, 0, 1])
 
 
 def check_vector(v1, v2):
-    assert np.isclose(v1, v2, atol=1e-15).all()
+    assert np.allclose(v1, v2, rtol=0, atol=1e-15)
 
 
 def check_rotation(r1, r2):
-    assert isclose(r1.q0, r2.q0, abs_tol=1e-15)
-    assert isclose(r1.q1, r2.q1, abs_tol=1e-15)
-    assert isclose(r1.q2, r2.q2, abs_tol=1e-15)
-    assert isclose(r1.q3, r2.q3, abs_tol=1e-15)
+    assert isclose(r1.q0, r2.q0, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r1.q1, r2.q1, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r1.q2, r2.q2, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r1.q3, r2.q3, rel_tol=0, abs_tol=1e-15)
 
 
 def check_angle(a1, a2):
-    assert isclose(a1, normalize_angle(a2, center=a1), abs_tol=1e-15)
+    a3 = a1.si.value
+    a4 = normalize_angle(a2, center=a1).si.value
+    assert np.isclose(a3, a4, rtol=0, atol=1e-12)
 
 
 def test_axis_angle_vector_convention():
     r = Rotation.from_axis_angle(
-        np.array([10, 10, 10]), 2 * pi / 3, convention='vector')
+        np.array([10, 10, 10]), 2 * pi / 3 * u.rad, convention='vector')
     check_vector(r.apply_to(I), J)
     check_vector(r.apply_to(J), K)
     check_vector(r.apply_to(K), I)
@@ -39,26 +42,27 @@ def test_axis_angle_vector_convention():
     s = 1 / sqrt(3)
     check_vector(r.get_axis(convention='vector'), np.array([s, s, s]))
     check_vector(r.get_axis(convention='frame'), np.array([-s, -s, -s]))
-    assert isclose(r.angle, 2 * pi / 3, abs_tol=1e-15)
+
+    check_angle(r.angle, 2 * pi / 3 * u.rad)
 
     with pytest.raises(ValueError):
         Rotation.from_axis_angle(
             np.array([0, 0, 0]), 2 * pi / 3, convention='vector')
 
-    r = Rotation.from_axis_angle(K, 1.5 * pi, convention='vector')
+    r = Rotation.from_axis_angle(K, 1.5 * pi * u.rad, convention='vector')
     check_vector(r.get_axis(convention='vector'), -K)
     check_vector(r.get_axis(convention='frame'), K)
-    assert isclose(r.angle, 0.5 * pi, abs_tol=1e-15)
+    check_angle(r.angle, 0.5 * pi * u.rad)
 
-    r = Rotation.from_axis_angle(J, pi, convention='vector')
+    r = Rotation.from_axis_angle(J, pi * u.rad, convention='vector')
     check_vector(r.get_axis(convention='vector'), J)
     check_vector(r.get_axis(convention='frame'), -J)
-    assert isclose(r.angle, pi, abs_tol=1e-15)
+    check_angle(r.angle, pi * u.rad)
 
 
 def test_axis_angle_frame_convention():
     r = Rotation.from_axis_angle(
-        np.array([10, 10, 10]), 2 * pi / 3, convention='frame')
+        np.array([10, 10, 10]), 2 * pi / 3 * u.rad, convention='frame')
     check_vector(r.apply_to(I), K)
     check_vector(r.apply_to(J), I)
     check_vector(r.apply_to(K), J)
@@ -66,47 +70,47 @@ def test_axis_angle_frame_convention():
     s = 1 / sqrt(3)
     check_vector(r.get_axis(convention='frame'), np.array([s, s, s]))
     check_vector(r.get_axis(convention='vector'), np.array([-s, -s, -s]))
-    assert isclose(r.angle, 2 * pi / 3, abs_tol=1e-15)
+    check_angle(r.angle, 2 * pi / 3 * u.rad)
 
     with pytest.raises(ValueError):
         Rotation.from_axis_angle(
-            np.array([0, 0, 0]), 2 * pi / 3, convention='frame')
+            np.array([0, 0, 0]), 2 * pi / 3 * u.rad, convention='frame')
 
-    r = Rotation.from_axis_angle(K, 1.5 * pi, convention='frame')
+    r = Rotation.from_axis_angle(K, 1.5 * pi * u.rad, convention='frame')
     check_vector(r.get_axis(convention='frame'), -K)
     check_vector(r.get_axis(convention='vector'), K)
-    assert isclose(r.angle, 0.5 * pi, abs_tol=1e-15)
+    check_angle(r.angle, 0.5 * pi * u.rad)
 
-    r = Rotation.from_axis_angle(J, pi, convention='frame')
+    r = Rotation.from_axis_angle(J, pi * u.rad, convention='frame')
     check_vector(r.get_axis(convention='frame'), J)
     check_vector(r.get_axis(convention='vector'), -J)
-    assert isclose(r.angle, pi, abs_tol=1e-15)
+    check_angle(r.angle, pi * u.rad)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
 def test_invert(convention):
     r = Rotation(0.001, 0.36, 0.48, 0.8)
     inv = ~r
-    check_rotation(r.compose(inv, convention='frame'), Rotation(1, 0, 0, 0))
-    check_rotation(inv.compose(r, convention='frame'), Rotation(1, 0, 0, 0))
-    assert isclose(r.angle, inv.angle, abs_tol=1e-15)
-    x = np.dot(r.get_axis(convention='frame'), inv.get_axis(convention='frame'))
-    assert isclose(-1, x, abs_tol=1e-15)
+    check_rotation(r.compose(inv, convention=convention), Rotation(1, 0, 0, 0))
+    check_rotation(inv.compose(r, convention=convention), Rotation(1, 0, 0, 0))
+    check_angle(r.angle, inv.angle)
+    x = np.dot(r.get_axis(convention=convention), inv.get_axis(convention=convention))
+    assert isclose(-1, x, rel_tol=0, abs_tol=1e-15)
 
 
-@pytest.mark.parametrize('matrix', [
-    np.array([
+@pytest.mark.parametrize('matrix, exception', [
+    (np.array([
         [0.0, 1.0, 0.0],
         [1.0, 0.0, 0.0]
-    ]),
-    np.array([
+    ]), TypeError),
+    (np.array([
         [0.445888, 0.797184, -0.407040],
         [0.821760, -0.184320, 0.539200],
         [-0.354816, 0.574912, 0.737280]
-    ])
+    ]), ValueError)
 ])
-def test_matrix_error(matrix):
-    with pytest.raises(ValueError):
+def test_matrix_error(matrix, exception):
+    with pytest.raises(exception):
         Rotation.from_matrix(matrix)
 
 
@@ -146,10 +150,10 @@ def test_matrix_error(matrix):
 ])
 def test_matrix(matrix, q0, q1, q2, q3):
     r = Rotation.from_matrix(matrix)
-    assert isclose(r.q0, q0, abs_tol=1e-15)
-    assert isclose(r.q1, q1, abs_tol=1e-15)
-    assert isclose(r.q2, q2, abs_tol=1e-15)
-    assert isclose(r.q3, q3, abs_tol=1e-15)
+    assert isclose(r.q0, q0, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r.q1, q1, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r.q2, q2, rel_tol=0, abs_tol=1e-15)
+    assert isclose(r.q3, q3, rel_tol=0, abs_tol=1e-15)
 
 
 def test_matrix_other():
@@ -170,15 +174,15 @@ def test_matrix_other():
     ])
     r = Rotation.from_matrix(m2)
     m3 = r.matrix
-    assert np.isclose(m2, m3, atol=6e-6).all()
+    assert np.allclose(m2, m3, rtol=0, atol=6e-6)
 
     for i in range(3):
         for j in range(3):
             m3tm3 = m3[i][0] * m3[j][0] + m3[i][1] * m3[j][1] + m3[i][2] * m3[j][2]
             if i == j:
-                assert isclose(m3tm3 - 1, 0, abs_tol=1e-14)
+                assert isclose(m3tm3 - 1, 0, rel_tol=0, abs_tol=1e-14)
             else:
-                assert isclose(m3tm3, 0, abs_tol=1e-15)
+                assert isclose(m3tm3, 0, rel_tol=0, abs_tol=1e-15)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
@@ -190,16 +194,18 @@ def test_matrix_other():
     RotationOrder.YZY,
     RotationOrder.ZXZ,
 ])
-def test_euler_angles_proper(convention, order):
+def test_euler_angles_proper_euler(convention, order):
     for alpha1 in np.arange(0.1, 6.2, 0.3):
         for alpha2 in np.arange(0.05, 3.1, 0.3):
             for alpha3 in np.arange(0.1, 6.2, 0.3):
                 r = Rotation.from_euler_angles(
-                    order, alpha1, alpha2, alpha3, convention=convention)
+                    order, alpha1 * u.rad, alpha2 * u.rad, alpha3 * u.rad,
+                    convention=convention)
+
                 angles = r.get_angles(order, convention=convention)
-                check_angle(angles[0], alpha1)
-                check_angle(angles[1], alpha2)
-                check_angle(angles[2], alpha3)
+                check_angle(angles[0], alpha1 * u.rad)
+                check_angle(angles[1], alpha2 * u.rad)
+                check_angle(angles[2], alpha3 * u.rad)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
@@ -211,12 +217,18 @@ def test_euler_angles_proper(convention, order):
     RotationOrder.ZXY,
     RotationOrder.ZYX,
 ])
-def test_euler_angles_tait_bryan(convention, order):
+def test_euler_angles_cardan(convention, order):
     for alpha1 in np.arange(0.1, 6.2, 0.3):
+        alpha1 *= u.rad
         for alpha2 in np.arange(-1.55, 1.55, 0.3):
+            alpha2 *= u.rad
             for alpha3 in np.arange(0.1, 6.2, 0.3):
+                alpha3 = alpha3 * u.rad
+
                 r = Rotation.from_euler_angles(
-                    order, alpha1, alpha2, alpha3, convention=convention)
+                    order, alpha1, alpha2, alpha3,
+                    convention=convention)
+
                 angles = r.get_angles(order, convention=convention)
                 check_angle(angles[0], alpha1)
                 check_angle(angles[1], alpha2)
@@ -225,20 +237,24 @@ def test_euler_angles_tait_bryan(convention, order):
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
 def test_compose(convention):
-    r1 = Rotation.from_axis_angle(np.array([2, -3, 5]), 1.7, convention=convention)
-    r2 = Rotation.from_axis_angle(np.array([-1, 3, 2]), 0.3, convention=convention)
+    r1 = Rotation.from_axis_angle(
+        np.array([2, -3, 5]), 1.7 * u.rad, convention=convention)
+
+    r2 = Rotation.from_axis_angle(
+        np.array([-1, 3, 2]), 0.3 * u.rad, convention=convention)
+
     r3 = r2.compose(r1, convention=convention)
 
     for x in np.arange(-0.9, 0.9, 0.2):
         for y in np.arange(-0.9, 0.9, 0.2):
             for z in np.arange(-0.9, 0.9, 0.2):
-                u = np.array([x, y, z])
+                w = np.array([x, y, z])
 
                 if convention == 'vector':
-                    v1 = r2.apply_to(r1.apply_to(u))
-                    v2 = r3.apply_to(u)
+                    v1 = r2.apply_to(r1.apply_to(w))
+                    v2 = r3.apply_to(w)
                 elif convention == 'frame':
-                    v1 = r1.apply_to(r2.apply_to(u))
-                    v2 = r3.apply_to(u)
+                    v1 = r1.apply_to(r2.apply_to(w))
+                    v2 = r3.apply_to(w)
 
                 check_vector(v1, v2)

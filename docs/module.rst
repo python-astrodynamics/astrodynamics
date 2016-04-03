@@ -8,4 +8,6 @@ Module Reference
   modules/bodies/index
   modules/constants
   modules/frames/index
+  modules/lowlevel/index
+  modules/rotation
   modules/utils/index

@@ -39,7 +39,7 @@ extras_require = dict()
 extras_require[':python_version<"3.4"'] = {'enum34', 'pathlib'}
 
 extras_require['test'] = {
-    'pytest>=2.7.3',
+    'pytest>=2.9.0',
     'responses',
 }
 

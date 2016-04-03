@@ -11,7 +11,7 @@ import numpy as np
 from astropy._erfa import bi00
 from astropy.time import Time
 
-from ..lowlevel.rotation import Rotation
+from ..rotation import Rotation
 from .frame import Frame, FrameProxy
 from .gcrf import GCRF
 from .transform import FixedTransformProvider, Transform

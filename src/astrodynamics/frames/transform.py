@@ -7,7 +7,7 @@ import astropy.units as u
 import numpy as np
 import six
 
-from ..lowlevel.rotation import Rotation
+from ..rotation import Rotation
 from ..utils import read_only_property, verify_unit
 
 

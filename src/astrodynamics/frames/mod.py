@@ -9,7 +9,7 @@ from collections import namedtuple
 import numpy as np
 from astropy._erfa import p06e, obl06
 
-from ..lowlevel.rotation import Rotation, RotationOrder
+from ..rotation import Rotation, RotationOrder
 from .frame import Frame, FrameProxy
 from .eme2000 import EME2000
 from .transform import AbstractTransformProvider, Transform
