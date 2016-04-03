@@ -195,12 +195,15 @@ class Rotation(ReprHelperMixin):
 
         Parameters:
             order: Order of rotations to compose, from left to right.
-            alpha1: Angle of the first elementary rotation.
-            alpah2: Angle of the second elementary rotation.
-            alpha3: Angle of the third elementary rotation.
+            alpha1: Angle of the first elementary rotation [rad].
+            alpah2: Angle of the second elementary rotation [rad].
+            alpha3: Angle of the third elementary rotation [rad].
             convention: Convention to use for the semantics of the angle.
 
         :type order: :class:`RotationOrder`
+        :type alpha1: :class:`~astropy.units.quantity.Quantity`
+        :type alpha2: :class:`~astropy.units.quantity.Quantity`
+        :type alpha3: :class:`~astropy.units.quantity.Quantity`
 
         .. seealso:: :ref:`Rotation Convention`
         """
@@ -297,7 +300,7 @@ class Rotation(ReprHelperMixin):
             convention: Convention to use for the semantics of the angle.
 
         Returns:
-            An array of three angles, in the specified order.
+            An tuple of three angles, in the specified order.
 
         Raises:
             ValueError: When the rotation is singular with respect to the

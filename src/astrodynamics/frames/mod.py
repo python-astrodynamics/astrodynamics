@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 
 from collections import namedtuple
 
+import astropy.units as u
 import numpy as np
 from astropy._erfa import p06e, obl06
 
@@ -38,14 +39,14 @@ class MODConventions2010TransformProvider(AbstractTransformProvider):
 
         I = np.array([1, 0, 0])
 
-        eps0 = obl06(date.jd1, date.jd2)
+        eps0 = obl06(date.jd1, date.jd2) * u.rad
         r4 = Rotation.from_axis_angle(I, eps0, convention='frame')
 
         results = P06eResults(*p06e(date.jd1, date.jd2))
 
-        psia = results.psia
-        oma = results.oma
-        chia = results.chia
+        psia = results.psia * u.rad
+        oma = results.oma * u.rad
+        chia = results.chia * u.rad
 
         precession = r4.compose(Rotation.from_euler_angles(
             RotationOrder.ZXZ, -psia, -oma, chia, convention='frame'))
