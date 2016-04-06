@@ -9,7 +9,7 @@ from math import acos, asin, atan2, cos, pi, sin, sqrt
 import astropy.units as u
 import numpy as np
 from represent import ReprHelperMixin
-from scipy.linalg import sqrtm, inv
+from scipy.linalg import inv, sqrtm
 
 from .compat.math import isclose
 from .utils import read_only_property, verify_unit
