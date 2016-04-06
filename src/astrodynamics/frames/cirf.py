@@ -9,7 +9,7 @@ from math import atan2, cos, sin, sqrt
 
 import astropy.units as u
 import numpy as np
-from astropy._erfa import s06, bpn2xy, pnm06a
+from astropy._erfa import bpn2xy, pnm06a, s06
 from astropy.utils.iers import IERS_A, IERS_A_URL
 from scipy.interpolate import pchip_interpolate
 

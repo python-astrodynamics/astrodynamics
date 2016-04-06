@@ -8,7 +8,7 @@ from astropy.time import Time
 from astrodynamics.frames import GCRF, EME2000
 from astrodynamics.rotation import Rotation
 
-from .check import check_rotation, check_vector
+from tests.check import check_rotation, check_vector
 
 
 def test_aas_reference_leo():
@@ -82,3 +82,7 @@ def test_erfa_bp00():
     r1 = Rotation.from_matrix(rb)
     r2 = GCRF.get_transform_to(EME2000, t).rotation
     check_rotation(r1, r2)
+
+
+def test_euler_1976():
+
