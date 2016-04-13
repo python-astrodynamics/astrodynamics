@@ -22,6 +22,7 @@ EMAIL = metadata['email']
 requires = {
     'appdirs',
     'astropy>=1.0.5',
+    'boltons',
     'colorama',
     'docopt',
     'jplephem>=2.0',

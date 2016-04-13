@@ -6,6 +6,7 @@ from contextlib import contextmanager
 
 from astropy import units as u
 from astropy.units import Unit, UnitBase
+from boltons.typeutils import make_sentinel
 
 from ..compat.contextlib import suppress
 from ..compat.math import isclose
@@ -147,3 +148,57 @@ def prefix(prefix, iterable):
     """Prepend items from `iterable` with `prefix` string."""
     for x in iterable:
         yield '{prefix}{x}'.format(prefix=prefix, x=x)
+
+
+inherit_doc_sentinel = make_sentinel(var_name='inherit_doc_sentinel')
+
+
+class _InheritDoc(object):
+    @staticmethod
+    def mark(fn):
+        if fn.__doc__ is not None:
+            raise TypeError(
+                'docstring for {} is not None, inherit_doc would overwrite.'
+                .format(fn))
+
+        fn.__doc__ = inherit_doc_sentinel
+        return fn
+
+    @staticmethod
+    def resolve(cls):
+        sentinel_found = False
+        for name, func in vars(cls).items():
+
+            # Only inherit docstrings for functions explicitly marked
+            if func.__doc__ is inherit_doc_sentinel:
+                # We will raise exceptions so that when nothing happens, it
+                # doesn't do so silently.
+                sentinel_found = True
+                parfunc_found = False
+
+                for parent in cls.__bases__:
+                    parfunc = getattr(parent, name, None)
+                    parfunc_found = bool(parfunc)
+
+                    if parfunc and getattr(parfunc, '__doc__', None):
+                        func.__doc__ = parfunc.__doc__
+                        break
+                else:
+                    # If we don't break, then replace inherit_doc_sentinel with
+                    # None
+                    func.__doc__ = None
+                    pass
+
+                if not parfunc_found:
+                    raise TypeError(
+                        "Cannot inherit docstring, '{}' not found in any parent"
+                        " classes.".format(name))
+
+        if not sentinel_found:
+            raise TypeError(
+                'Could not resolve docstring inheritance for {}, you must use'
+                ' the inherit_doc decorator.'.format(cls))
+
+        return cls
+
+inherit_doc = _InheritDoc()

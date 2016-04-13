@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 from .compat import PY2, PY3, PY33, WINDOWS
 from .helper import (
     format_size,
+    inherit_doc,
     prefix,
     qisclose,
     read_only_property,
@@ -28,6 +29,7 @@ __all__ = (
     'DownloadProgressBar',
     'DownloadProgressSpinner',
     'format_size',
+    'inherit_doc',
     'InvalidCategoryError',
     'KernelNotFoundError',
     'prefix',
