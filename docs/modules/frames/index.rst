@@ -5,6 +5,7 @@ Frames
 .. py:module:: astrodynamics.frames
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   frame
+    frame
+    mod

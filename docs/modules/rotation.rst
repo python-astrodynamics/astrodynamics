@@ -6,7 +6,7 @@ Rotations
 
 .. autoclass:: astrodynamics.rotation.Rotation
    :members: __init__, from_axis_angle, from_matrix, from_euler_angles, angle,
-             get_axis, get_angles, matrix, apply_to, compose
+             get_axis, get_angles, matrix, apply_to, compose, distance_to
    :show-inheritance:
 
 .. autoclass:: astrodynamics.rotation.RotationOrder
