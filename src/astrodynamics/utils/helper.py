@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 import errno
 from contextlib import contextmanager
 
+import numpy as np
 from astropy import units as u
 from astropy.units import Unit, UnitBase
 from boltons.typeutils import make_sentinel
@@ -202,3 +203,33 @@ class _InheritDoc(object):
         return cls
 
 inherit_doc = _InheritDoc()
+
+
+def find_nearest_index(array, value):
+    idx_sorted = np.argsort(array)
+    sorted_array = np.array(array[idx_sorted])
+    idx = np.searchsorted(sorted_array, value, side='left')
+    if idx >= len(array):
+        idx_nearest = idx_sorted[len(array) - 1]
+        return idx_nearest
+    elif idx == 0:
+        idx_nearest = idx_sorted[0]
+        return idx_nearest
+    else:
+        if (abs(value - sorted_array[idx - 1]) <
+                abs(value - sorted_array[idx])):
+            idx_nearest = idx_sorted[idx - 1]
+            return idx_nearest
+        else:
+            idx_nearest = idx_sorted[idx]
+            return idx_nearest
+
+
+def get_neighbors_index(array, central, num_neighbors):
+    idx = find_nearest_index(array, central)
+
+    start = max(0, idx - (num_neighbors - 1) // 2)
+    end = min(len(array), start + num_neighbors)
+    start = end - num_neighbors
+
+    return slice(start, end)
