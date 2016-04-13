@@ -513,8 +513,37 @@ class Rotation(ReprHelperMixin):
 
         return Rotation(q0, q1, q2, q3, normalized=True)
 
+    def distance_to(self, other):
+        """Compute the *distance* between two rotations.
+
+        The *distance* is intended here as a way to check if two rotations are
+        almost similar (i.e. they transform vectors the same way) or very
+        different. It is mathematically defined as the angle of the rotation
+        :math:`r` that prepended to one of the rotations gives the other one:
+
+        .. math::
+
+            r_{1}(r) = r_{2}
+
+        This distance is an angle between 0 and :math:`\pi` radians. Its value
+        is the smallest possible upper bound of the angle between
+        :math:`r_{1}(v)` and :math:`r_{2}(v)` for all possible vectors :math:`v`.
+        This upper bound is reached for some :math:`v`. The distance is equal
+        to 0 if an donly if the two rotations are identical. Here, :math:`r_{1}`
+        is the instance and :math:`r_{2}` is `other`.
+
+        Comparing two rotations should always be done using this value rather
+        than for example comparing the components of the quaternions. It is much
+        more stable, and has a geometric meaning. Also comparing quaternions
+        components is error prone since for example quaternions
+        (0.36, 0.48, -0.48, -0.64) and (-0.36, -0.48, 0.48, 0.64) represent
+        exactly the same rotation despite their components are different (they
+        are exact opposites).
+        """
+        return (~self).compose(other).angle
+
     def __invert__(self):
-        return Rotation(self.q0, -self.q1, -self.q2, -self.q3, normalized=True)
+        return Rotation(-self.q0, self.q1, self.q2, self.q3, normalized=True)
 
     def __eq__(self, other):
         if isinstance(other, Rotation):
