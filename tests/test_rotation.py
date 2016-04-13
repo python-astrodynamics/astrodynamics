@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 from math import pi, sqrt
 
 import astropy.units as u
+import itertools
 import numpy as np
 import pytest
 from astrodynamics.compat.math import isclose
@@ -179,20 +180,20 @@ def test_matrix_other():
     RotationOrder.ZXZ,
 ])
 def test_euler_angles_proper_euler(convention, order):
-    for alpha1 in np.arange(0.1, 6.2, 0.3):
-        alpha1 *= u.rad
-        for alpha2 in np.arange(0.05, 3.1, 0.3):
-            alpha2 *= u.rad
-            for alpha3 in np.arange(0.1, 6.2, 0.3):
-                alpha3 = alpha3 * u.rad
-                r = Rotation.from_euler_angles(
-                    order, alpha1, alpha2, alpha3,
-                    convention=convention)
+    it = itertools.product(
+        np.arange(0.1, 6.2, 0.3) * u.rad,
+        np.arange(0.05, 3.1, 0.3) * u.rad,
+        np.arange(0.1, 6.2, 0.3) * u.rad,
+    )
+    for alpha1, alpha2, alpha3 in it:
+        r = Rotation.from_euler_angles(
+            order, alpha1, alpha2, alpha3,
+            convention=convention)
 
-                angles = r.get_angles(order, convention=convention)
-                check_angle(angles[0], alpha1)
-                check_angle(angles[1], alpha2)
-                check_angle(angles[2], alpha3)
+        angles = r.get_angles(order, convention=convention)
+        check_angle(angles[0], alpha1)
+        check_angle(angles[1], alpha2)
+        check_angle(angles[2], alpha3)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
@@ -205,21 +206,20 @@ def test_euler_angles_proper_euler(convention, order):
     RotationOrder.ZYX,
 ])
 def test_euler_angles_cardan(convention, order):
-    for alpha1 in np.arange(0.1, 6.2, 0.3):
-        alpha1 *= u.rad
-        for alpha2 in np.arange(-1.55, 1.55, 0.3):
-            alpha2 *= u.rad
-            for alpha3 in np.arange(0.1, 6.2, 0.3):
-                alpha3 = alpha3 * u.rad
+    it = itertools.product(
+        np.arange(0.1, 6.2, 0.3) * u.rad,
+        np.arange(-1.55, 1.55, 0.3) * u.rad,
+        np.arange(0.1, 6.2, 0.3) * u.rad,
+    )
+    for alpha1, alpha2, alpha3 in it:
+        r = Rotation.from_euler_angles(
+            order, alpha1, alpha2, alpha3,
+            convention=convention)
 
-                r = Rotation.from_euler_angles(
-                    order, alpha1, alpha2, alpha3,
-                    convention=convention)
-
-                angles = r.get_angles(order, convention=convention)
-                check_angle(angles[0], alpha1)
-                check_angle(angles[1], alpha2)
-                check_angle(angles[2], alpha3)
+        angles = r.get_angles(order, convention=convention)
+        check_angle(angles[0], alpha1)
+        check_angle(angles[1], alpha2)
+        check_angle(angles[2], alpha3)
 
 
 @pytest.mark.parametrize('convention', ['vector', 'frame'])
@@ -232,16 +232,18 @@ def test_compose(convention):
 
     r3 = r2.compose(r1, convention=convention)
 
-    for x in np.arange(-0.9, 0.9, 0.2):
-        for y in np.arange(-0.9, 0.9, 0.2):
-            for z in np.arange(-0.9, 0.9, 0.2):
-                w = np.array([x, y, z])
+    float_range = np.arange(-0.9, 0.9, 0.2)
 
-                if convention == 'vector':
-                    v1 = r2.apply_to(r1.apply_to(w))
-                    v2 = r3.apply_to(w)
-                elif convention == 'frame':
-                    v1 = r1.apply_to(r2.apply_to(w))
-                    v2 = r3.apply_to(w)
+    it = itertools.product(float_range, float_range, float_range)
 
-                check_vector(v1, v2)
+    for x, y, z in it:
+        w = np.array([x, y, z])
+
+        if convention == 'vector':
+            v1 = r2.apply_to(r1.apply_to(w))
+            v2 = r3.apply_to(w)
+        elif convention == 'frame':
+            v1 = r1.apply_to(r2.apply_to(w))
+            v2 = r3.apply_to(w)
+
+        check_vector(v1, v2)
