@@ -14,13 +14,20 @@ from astropy.utils.iers import IERS_A, IERS_A_URL
 from scipy.interpolate import pchip_interpolate
 
 from ..rotation import Rotation
+from ..utils.helper import get_neighbors_index
+from ..utils.iers import IERSConventions2010
 from .frame import Frame, FrameProxy
 from .gcrf import GCRF
 from .transform import AbstractTransformProvider, Transform
 
 
-class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
-    def get_transform(self, date):
+class CIRFSimpleEOPTransformProvider(AbstractTransformProvider):
+    def __init__(self, conventions):
+        self.conventions = conventions
+        """Implementation of :class:`AbstractIERSConventions` to use."""
+
+    def get_transform(self, time):
+        # TODO: File management somewhere else
         try:
             iers_a = IERS_A.open()
         except OSError as e:
@@ -28,52 +35,25 @@ class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
                 raise
             iers_a = IERS_A.open(IERS_A_URL)
 
-        def find_nearest_index(array, value):
-            idx_sorted = np.argsort(array)
-            sorted_array = np.array(array[idx_sorted])
-            idx = np.searchsorted(sorted_array, value, side="left")
-            if idx >= len(array):
-                idx_nearest = idx_sorted[len(array) - 1]
-                return idx_nearest
-            elif idx == 0:
-                idx_nearest = idx_sorted[0]
-                return idx_nearest
-            else:
-                if (abs(value - sorted_array[idx - 1]) <
-                        abs(value - sorted_array[idx])):
-                    idx_nearest = idx_sorted[idx - 1]
-                    return idx_nearest
-                else:
-                    idx_nearest = idx_sorted[idx]
-                    return idx_nearest
+        idx = get_neighbors_index(iers_a['MJD'], time.mjd, 4)
 
-        def get_neighbors_index(array, central, num_neighbors):
-            idx = find_nearest_index(array, central)
-
-            start = max(0, idx - (num_neighbors - 1) // 2)
-            end = min(len(array), start + num_neighbors)
-            start = end - num_neighbors
-
-            return slice(start, end)
-
-        idx = get_neighbors_index(iers_a['MJD'], date.mjd, 4)
-
-        x, y = bpn2xy(pnm06a(date.jd1, date.jd2))
+        x, y = self.conventions.get_cip_position(time)
+        x, y = x.si.value, y.si.value
 
         dx = pchip_interpolate(
             iers_a['MJD'][idx],
-            iers_a['dX_2000A_A'][idx].to(u.rad).value, date.mjd)
+            iers_a['dX_2000A_A'][idx].to(u.rad).value, time.mjd)
 
         dy = pchip_interpolate(
             iers_a['MJD'][idx],
-            iers_a['dY_2000A_A'][idx].to(u.rad).value, date.mjd)
+            iers_a['dY_2000A_A'][idx].to(u.rad).value, time.mjd)
 
         # Position of the Celestial Intermediate Pole (CIP)
         xc = x + dx
         yc = y + dy
 
         # Position of the Celestial Intermediate Origin (CIO)
-        sc = s06(date.jd1, date.jd2, xc, yc)
+        sc = self.conventions.get_cio_locator(time, xc, yc).si.value
 
         # Set up the bias, precession and nutation rotation
         x2py2 = xc ** 2 + yc ** 2
@@ -90,7 +70,7 @@ class CIRFConventions2010SimpleEOPTransformProvider(AbstractTransformProvider):
         bpn = Rotation(zp1 * (xpr_cos + y_sin), -r * (y_cos + xpr_sin),
                        r * (xpr_cos - y_sin), zp1 * (y_cos - xpr_sin))
 
-        return Transform(date, rot=bpn)
+        return Transform(time, rot=bpn)
 
 
 CIRF_CONVENTIONS_2010_SIMPLE_EOP = FrameProxy()
@@ -100,7 +80,7 @@ CIRF_CONVENTIONS_2010_SIMPLE_EOP = FrameProxy()
 def _():
     cirf_conventions_2010_simple_eop = Frame(
         parent=GCRF,
-        transform_provider=CIRFConventions2010SimpleEOPTransformProvider(),
+        transform_provider=CIRFSimpleEOPTransformProvider(IERSConventions2010()),
         name='CIRF_CONVENTIONS_2010_SIMPLE_EOP',
         pseudo_intertial=True)
 

@@ -22,6 +22,8 @@ def _():
     # Obliquity of the ecliptic.
     epsilon_0 = 84381.448 * u.arcsec
 
+    # We get the angles from bi00 directly rather than use the rb matrix from
+    # bp00 which returns additional matrices we don't need.
     d_psi_b, d_epsilon_b, alpha_0 = bi00()
 
     # Longitude correction

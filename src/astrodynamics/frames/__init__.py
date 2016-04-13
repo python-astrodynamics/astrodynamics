@@ -8,7 +8,8 @@ from .cirf import CIRF_CONVENTIONS_2010_SIMPLE_EOP
 from .eme2000 import EME2000
 from .frame import Frame, FrameProxy
 from .gcrf import GCRF
-from .mod import MOD_CONVENTIONS_2010
+from .mod import MOD_CONVENTIONS_2010_SIMPLE_EOP
+from .tod import TOD_CONVENTIONS_2010_SIMPLE_EOP
 
 __all__ = (
     'CIRF_CONVENTIONS_2010_SIMPLE_EOP',
@@ -16,5 +17,6 @@ __all__ = (
     'Frame',
     'FrameProxy',
     'GCRF',
-    'MOD_CONVENTIONS_2010',
+    'MOD_CONVENTIONS_2010_SIMPLE_EOP',
+    'TOD_CONVENTIONS_2010_SIMPLE_EOP',
 )

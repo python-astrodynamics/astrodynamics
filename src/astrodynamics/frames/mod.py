@@ -4,65 +4,58 @@
 # licenses/OREKIT.txt)
 from __future__ import absolute_import, division, print_function
 
-from collections import namedtuple
-
-import astropy.units as u
 import numpy as np
-from astropy._erfa import p06e, obl06
+from astropy.time import Time
 
 from ..rotation import Rotation, RotationOrder
-from .frame import Frame, FrameProxy
+from ..utils import inherit_doc
+from ..utils.iers import IERSConventions2010
 from .eme2000 import EME2000
+from .frame import Frame, FrameProxy
 from .transform import AbstractTransformProvider, Transform
 
 
-class MODConventions2010TransformProvider(AbstractTransformProvider):
-    def get_transform(self, date):
-        P06eResults = namedtuple(
-            'P06eResults', [
-                'eps0',
-                'psia',
-                'oma',
-                'bpa',
-                'bqa',
-                'pia',
-                'bpia',
-                'epsa',
-                'chia',
-                'za',
-                'zetaa',
-                'thetaa',
-                'pa',
-                'gam',
-                'phi',
-                'psi'])
+@inherit_doc.resolve
+class MODTransformProvider(AbstractTransformProvider):
+    """Mean Equinox of Date transform provider."""
+    def __init__(self, conventions):
+        self.conventions = conventions
+        """Implementation of :class:`AbstractIERSConventions` to use."""
 
         i = np.array([1, 0, 0])
 
-        eps0 = obl06(date.jd1, date.jd2) * u.rad
-        r4 = Rotation.from_axis_angle(i, eps0, convention='frame')
+        j2000_epoch = Time('J2000', scale='tt')
 
-        results = P06eResults(*p06e(date.jd1, date.jd2))
+        eps0 = conventions.get_mean_obliquity(j2000_epoch)
+        r = Rotation.from_axis_angle(i, eps0, convention='frame')
 
-        psia = results.psia * u.rad
-        oma = results.oma * u.rad
-        chia = results.chia * u.rad
+        self.ecliptic_equator_pole_rotation = r
 
-        precession = r4.compose(Rotation.from_euler_angles(
-            RotationOrder.ZXZ, -psia, -oma, chia, convention='frame'))
+    @inherit_doc.mark
+    def get_transform(self, time):
+        pa = self.conventions.get_precession_angles(time)
 
-        return Transform(date, rot=precession)
+        precession = self.ecliptic_equator_pole_rotation.compose(
+            Rotation.from_euler_angles(
+                RotationOrder.ZXZ,
+                -pa.psi_a,
+                -pa.omega_a,
+                pa.chi_a,
+                convention='frame'),
+            convention='frame')
+
+        return Transform(time, rot=precession)
 
 
-MOD_CONVENTIONS_2010 = FrameProxy()
+MOD_CONVENTIONS_2010_SIMPLE_EOP = FrameProxy()
 
 
-@MOD_CONVENTIONS_2010.register_factory
+@MOD_CONVENTIONS_2010_SIMPLE_EOP.register_factory
 def _():
-    mod_conventions_2010 = Frame(
+    mod_conventions_2010_simple_eop = Frame(
         parent=EME2000,
-        transform_provider=MODConventions2010TransformProvider(),
-        name='MOD_CONVENTIONS_2010',
+        transform_provider=MODTransformProvider(IERSConventions2010()),
+        name='MOD_CONVENTIONS_2010_SIMPLE_EOP',
         pseudo_intertial=True)
 
-    return mod_conventions_2010
+    return mod_conventions_2010_simple_eop

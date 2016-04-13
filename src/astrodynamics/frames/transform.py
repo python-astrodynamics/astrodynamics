@@ -14,7 +14,8 @@ from ..utils import read_only_property, verify_unit
 @six.add_metaclass(ABCMeta)
 class AbstractTransformProvider(object):
     @abstractmethod
-    def get_transform(self, date):
+    def get_transform(self, time):
+        # TODO: docstring
         raise NotImplementedError
 
 
