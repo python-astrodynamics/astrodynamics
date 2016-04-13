@@ -12,7 +12,7 @@ import six
 from represent import ReprHelper
 
 from ..compat.abc import abstractstaticmethod
-from ..utils import read_only_property
+from ..utils import inherit_doc, read_only_property
 from .transform import Transform
 
 
@@ -150,14 +150,17 @@ class AbstractFrame(object):
         raise NotImplementedError
 
     @abstractmethod
-    def get_transform_to(self, destination_frame, date):
+    def get_transform_to(self, destination_frame, time):
+        # TODO: docstring
         raise NotImplementedError
 
-    @abstractstaticmethod
-    def find_common_ancestor(from_, to):  # noqa
+    @abstractmethod
+    def find_common_ancestor(self, other):
+        # TODO: docstring
         raise NotImplementedError
 
 
+@inherit_doc.resolve
 class Frame(AbstractFrame):
     """Reference frame class."""
     parent = read_only_property('_parent', 'Parent frame.')
@@ -179,38 +182,39 @@ class Frame(AbstractFrame):
         self._name = name
         self._pseudo_intertial = pseudo_intertial
 
-    def get_transform_to(self, destination_frame, date):
-        if destination_frame is self:
-            return Transform(date)
+    @inherit_doc.mark
+    def get_transform_to(self, destination_frame, time):
+        if destination_frame == self:
+            return Transform(time)
 
-        common = Frame.find_common_ancestor(self, destination_frame)
+        common = self.find_common_ancestor(destination_frame)
 
-        common_to_instance = Transform(date)
+        common_to_instance = Transform(time)
         for frame in self.ancestors:
-            if frame is common:
+            if frame == common:
                 break
             common_to_instance = (
-                frame.transform_provider.get_transform(date) +
+                frame.transform_provider.get_transform(time) +
                 common_to_instance)
 
-        common_to_destination = Transform(date)
+        common_to_destination = Transform(time)
         for frame in destination_frame.ancestors:
-            if frame is common:
+            if frame == common:
                 break
             common_to_destination = (
-                frame.transform_provider.get_transform(date) +
+                frame.transform_provider.get_transform(time) +
                 common_to_destination)
 
         return ~common_to_instance + common_to_destination
 
-    @staticmethod
-    def find_common_ancestor(from_, to):
-        if from_.depth > to.depth:
-            current_from = from_.ancestors[from_.depth - to.depth]
-            current_to = to
+    @inherit_doc.mark
+    def find_common_ancestor(self, other):
+        if self.depth > other.depth:
+            current_from = self.ancestors[self.depth - other.depth]
+            current_to = other
         else:
-            current_from = from_
-            current_to = to.ancestors[to.depth - from_.depth]
+            current_from = self
+            current_to = other.ancestors[other.depth - self.depth]
 
         while current_from != current_to:
             current_from = current_from.parent
@@ -225,6 +229,7 @@ class Frame(AbstractFrame):
         return str(r)
 
 
+@inherit_doc.resolve
 class FrameProxy(AbstractFrame):
     """Proxy a :class:`Frame` using a factory function for lazy initialisation.
 
@@ -262,39 +267,60 @@ class FrameProxy(AbstractFrame):
             self._frame = self._factory()
 
     @property
+    def frame(self):
+        self._lazy_init()
+        return self._frame
+
+    @property
+    @inherit_doc.mark
     def parent(self):
         self._lazy_init()
         return self._frame.parent
 
     @property
+    @inherit_doc.mark
     def depth(self):
         self._lazy_init()
         return self._frame.depth
 
     @property
+    @inherit_doc.mark
     def transform_provider(self):
         self._lazy_init()
         return self._frame.transform_provider
 
     @property
+    @inherit_doc.mark
     def name(self):
         self._lazy_init()
         return self._frame.name
 
     @property
+    @inherit_doc.mark
     def pseudo_intertial(self):
         self._lazy_init()
         return self._frame.pseudo_intertial
 
     @property
+    @inherit_doc.mark
     def ancestors(self):
         self._lazy_init()
         return self._frame.ancestors
 
-    def get_transform_to(self, destination_frame, date):
+    @inherit_doc.mark
+    def get_transform_to(self, destination_frame, time):
         self._lazy_init()
-        return self._frame.get_transform_to(destination_frame, date)
+        return self._frame.get_transform_to(destination_frame, time)
 
-    def find_common_ancestor(self, from_, to):
+    @inherit_doc.mark
+    def find_common_ancestor(self, other):
         self._lazy_init()
-        return self._frame.find_common_ancestor(from_, to)
+        return self._frame.find_common_ancestor(self, other)
+
+    def __eq__(self, other):
+        if isinstance(other, FrameProxy):
+            return self.frame == other.frame
+        elif isinstance(other, Frame):
+            return self.frame == other
+        else:
+            return NotImplemented
