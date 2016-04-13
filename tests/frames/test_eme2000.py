@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 import astropy.units as u
 import numpy as np
 from astropy.time import Time
+from astropy._erfa import bp00
 
 from astrodynamics.frames import GCRF, EME2000
 from astrodynamics.rotation import Rotation
@@ -77,12 +78,7 @@ def test_aas_reference_geo():
 
 def test_erfa_bp00():
     t = Time('2004-02-14', scale='utc')
-    from astropy._erfa import bp00
     rb, rp, rbp = bp00(t.jd1, t.jd2)
     r1 = Rotation.from_matrix(rb)
     r2 = GCRF.get_transform_to(EME2000, t).rotation
-    check_rotation(r1, r2)
-
-
-def test_euler_1976():
-
+    check_rotation(r1, r2, atol=2.5e-16 * u.rad)
