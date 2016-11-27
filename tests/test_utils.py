@@ -62,6 +62,7 @@ def test_format_size(args, string):
         args = args,
     assert format_size(*args) == string
 
+
 spk_data = [
     {'category': 'planets', 'kernel': 'de432s', 'old': False},
     {'category': 'planets', 'kernel': 'de410mini', 'old': True},

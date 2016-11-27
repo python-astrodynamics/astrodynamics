@@ -50,5 +50,6 @@ def install_numpy():
     else:
         pip.main(['install', 'numpy'])
 
+
 if __name__ == '__main__':
     install_numpy()

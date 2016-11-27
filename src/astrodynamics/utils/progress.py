@@ -49,6 +49,7 @@ def _select_progress_class(preferred, fallback):
     else:
         return preferred
 
+
 _BaseBar = _select_progress_class(IncrementalBar, Bar)
 
 

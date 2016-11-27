@@ -40,4 +40,5 @@ def _suppress(*exceptions):
     """
     return _SuppressExceptions(*exceptions)
 
+
 suppress = suppress or _suppress

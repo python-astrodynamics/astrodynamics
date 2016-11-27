@@ -73,6 +73,7 @@ class ReferenceEllipsoid(Ellipsoid):
         r.keyword_with_value('mu', self.mu.view(Quantity))
         r.keyword_with_value('spin', self.spin.view(Quantity))
 
+
 wgs84 = ReferenceEllipsoid(
     a=WGS84_EQUATORIAL_RADIUS,
     f=WGS84_FLATTENING,
