@@ -1,0 +1,9 @@
+include .coveragerc
+include CHANGELOG.md
+include tox.ini
+recursive-include licenses *.txt
+recursive-include data *
+recursive-include docs *
+prune docs/_build
+recursive-include shovel *.py
+recursive-include tests *.py

@@ -67,7 +67,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # Parse metadata from __init__.py
-INIT_FILE = '../astrodynamics/__init__.py'
+INIT_FILE = '../src/astrodynamics/__init__.py'
 init_data = open(INIT_FILE).read()
 
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_data))

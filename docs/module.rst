@@ -7,4 +7,4 @@ Module Reference
 
   modules/bodies/index
   modules/constants
-  modules/util
+  modules/utils/index

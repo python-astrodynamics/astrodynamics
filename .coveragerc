@@ -1,9 +1,15 @@
 [run]
-branch = True
-source =
+branch=True
+source=
     astrodynamics
+    tests/
 
 [paths]
-source =
-    astrodynamics
+source=
+    src/astrodynamics
     .tox/*/lib/python*/site-packages/astrodynamics
+    C:\projects\venv\Lib\site-packages\astrodynamics
+
+[report]
+exclude_lines=
+	if __name__ == '__main__':

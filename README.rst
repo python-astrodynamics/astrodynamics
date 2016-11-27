@@ -38,6 +38,6 @@ astrodynamics uses `semantic versioning <http://semver.org>`__
 .. |MIT License| image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
    :target: https://raw.githubusercontent.com/python-astrodynamics/astrodynamics/master/LICENSE
 .. |Coverage| image:: https://img.shields.io/codecov/c/github/python-astrodynamics/astrodynamics/master.svg?style=flat-square
-   :target: https://codecov.io/github/python-astrodynamics?branch=master
+   :target: https://codecov.io/github/python-astrodynamics/astrodynamics?branch=master
 .. |Documentation| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square
-	:target: http://astrodynamics.readthedocs.org/en/latest/
+   :target: http://astrodynamics.readthedocs.org/en/latest/

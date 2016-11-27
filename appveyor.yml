@@ -6,7 +6,9 @@ environment:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
-    WITH_COMPILER: "cmd /E:ON /V:ON /C .\\.appveyor\\run_with_compiler.cmd"
+    BUILD: "cmd /E:ON /V:ON /C .\\.appveyor\\build.cmd"
+    NUMPY_URL:
+      secure: drCgBIMN3vdVjPRXNyiBAHa4g9VeRmnylFuhd7aUUA7XYhA8FfyJ5bHdXtzkFhgT6GzUSXqp19RcXW6DOX9eow==
 
   matrix:
     # Pre-installed Python versions, which Appveyor may upgrade to
@@ -14,76 +16,44 @@ environment:
     # See: http://www.appveyor.com/docs/installed-software#python
 
     - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.x" # currently 2.7.9
-      PYTHON_ARCH: "32"
-      TOXENV: "py27"
-      TOXPYTHON: "C:\\Python27\\python.exe"
 
     - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.x" # currently 2.7.9
-      PYTHON_ARCH: "64"
-      TOXENV: "py27"
-      TOXPYTHON: "C:\\Python27-x64\\python.exe"
 
     - PYTHON: "C:\\Python33"
-      PYTHON_VERSION: "3.3.x" # currently 3.3.5
-      PYTHON_ARCH: "32"
-      TOXENV: "py33"
-      TOXPYTHON: "C:\\Python33\\python.exe"
 
     - PYTHON: "C:\\Python33-x64"
-      PYTHON_VERSION: "3.3.x" # currently 3.3.5
-      PYTHON_ARCH: "64"
-      TOXENV: "py33"
-      TOXPYTHON: "C:\\Python33-x64\\python.exe"
+      DISTUTILS_USE_SDK: "1"
 
     - PYTHON: "C:\\Python34"
-      PYTHON_VERSION: "3.4.x" # currently 3.4.3
-      PYTHON_ARCH: "32"
-      TOXENV: "py34"
-      TOXPYTHON: "C:\\Python34\\python.exe"
 
     - PYTHON: "C:\\Python34-x64"
-      PYTHON_VERSION: "3.4.x" # currently 3.4.3
-      PYTHON_ARCH: "64"
-      TOXENV: "py34"
-      TOXPYTHON: "C:\\Python34-x64\\python.exe"
+      DISTUTILS_USE_SDK: "1"
 
     - PYTHON: "C:\\Python35"
-      PYTHON_VERSION: "3.5.x" # currently 3.5.0
-      PYTHON_ARCH: "32"
-      TOXENV: "py35"
-      TOXPYTHON: "C:\\Python35\\python.exe"
 
     - PYTHON: "C:\\Python35-x64"
-      PYTHON_VERSION: "3.5.x" # currently 3.5.0
-      PYTHON_ARCH: "64"
-      TOXENV: "py35"
-      TOXPYTHON: "C:\\Python35-x64\\python.exe"
-
 
 init:
-  - echo %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 install:
-  - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
-  - powershell .appveyor\\install.ps1
-  - pip install "virtualenv>=13.1.2" wheel tox codecov
+  - pip install -U virtualenv
+  - python -m virtualenv C:\projects\venv
+  - C:\projects\venv\Scripts\activate.bat
+  - pip install -U codecov coverage setuptools six wheel
+  - "%BUILD% python .appveyor\\install_numpy.py"
+  - "%BUILD% pip install .[test]"
 
 build: off
 
 test_script:
-  - "%WITH_COMPILER% tox -v"
-  - ps: ls -R C:/Users/appveyor/AppData/Local/pip/Cache/wheels
+  - coverage run --parallel-mode -m pytest
+  - coverage combine
+  - coverage report -m
 
 after_test:
-  - type C:\\projects\\astrodynamics\\.tox\\%TOXENV%\\log\\%TOXENV%-*.log
-  - codecov --env APPVEYOR PYTHON_ARCH TOXENV
-  - "%WITH_COMPILER% python setup.py bdist_wheel"
-  - "%WITH_COMPILER% python setup.py bdist_wininst"
-  - "%WITH_COMPILER% python setup.py bdist_msi"
-  - ps: "ls dist"
+  - codecov --env APPVEYOR PYTHON
+  - "%BUILD% python setup.py bdist_wheel"
 
 artifacts:
   # Archive the generated packages in the ci.appveyor.com build report.
