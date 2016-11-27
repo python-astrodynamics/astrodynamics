@@ -303,7 +303,7 @@ intersphinx_mapping = {
     'python': ('http://docs.python.org/3', None),
     'ipython': ('http://ipython.org/ipython-doc/stable', None),
     'astropy': ('http://docs.astropy.org/en/stable/', None),
-    'represent': ('http://pythonhosted.org/Represent', None),
+    'represent': ('http://represent.readthedocs.io/en/latest/', None),
 }
 
 autodoc_member_order = 'bysource'
